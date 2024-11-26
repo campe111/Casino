@@ -1,4 +1,4 @@
-class Usuario {
+export class UsuarioCasino {
     public nombre: string;
     public edad: number;
     private juegosJugados: string[];
@@ -26,7 +26,7 @@ class Usuario {
   
   export class Casino {
     private juegosDisponibles: string[];
-    private usuarios: Usuario[];
+    private usuarios: UsuarioCasino[];
   
     constructor() {
       this.juegosDisponibles = ['Bingo', 'Tragamonedas', 'Blackjack'];
@@ -41,13 +41,13 @@ class Usuario {
         return;
       }
   
-      const nuevoUsuario = new Usuario(nombre, edad);
+      const nuevoUsuario = new UsuarioCasino(nombre, edad);
       this.usuarios.push(nuevoUsuario);
       console.log(`Usuario ${nombre} registrado con éxito.`);
     }
   
     // Acceder a un usuario
-    public accederUsuario(nombre: string): Usuario | null {
+    public accederUsuario(nombre: string): UsuarioCasino | null {
       const usuario = this.usuarios.find(u => u.nombre === nombre);
       if (usuario) {
         console.log(`Acceso exitoso para ${nombre}.`);
@@ -77,7 +77,7 @@ class Usuario {
     }
   
     // Elegir un juego
-    public elegirJuego(usuario: Usuario, juegoSeleccionado: string): void {
+    public elegirJuego(usuario: UsuarioCasino, juegoSeleccionado: string): void {
       if (this.juegosDisponibles.includes(juegoSeleccionado)) {
         console.log(`${usuario.nombre} ha elegido jugar a ${juegoSeleccionado}.`);
         usuario.jugar(juegoSeleccionado);
