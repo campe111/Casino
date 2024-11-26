@@ -3,6 +3,7 @@ export class Usuario {
     private dni: number;
     private edad: number;
     private saldo: number;
+    static validarEdad: any;
 
     constructor(nombreUsuario: string, dni: number, saldo: number, edad: number) {
         this.nombreUsuario = nombreUsuario;
@@ -36,12 +37,12 @@ export class Usuario {
     }
 
     mostrarSaldo(): void {
-        console.log("El saldo de ${this.nombreUsuario} es ${this.saldo}");
+        console.log(`El saldo de ${this.nombreUsuario} es ${this.saldo}`);
     }
 
     validarEdad(edad: number): void {
         if (edad >= 18) {
-            console.log("BIENVENIDO, ¡Suerte !${this.nombreUsuario}");
+            console.log(`BIENVENIDO, ¡Suerte !${this.nombreUsuario}`);
             
         } else {
             console.log("¡No tienes edad suficiente para jugar!");

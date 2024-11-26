@@ -4,5 +4,4 @@ export interface Apuesta{
     dineroPerdido():number;
     apuestaMinima():number;
     apuestaMaxima():number;
-
 }
