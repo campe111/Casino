@@ -25,18 +25,19 @@ realizarApuesta(monto:number):void{
 }
 
 
+
 // Métodos de la Interfaz Apuesta
 dineroGanado(): number{
-    
+    return 10;
 }
 dineroPerdido():number{
-
+    return 10;
 }
 apuestaMinima():number{
-
+    return 500;
 }
 apuestaMaxima():number{
-
+    return 3000;
 }
 }
 
@@ -48,5 +49,3 @@ apuestaMaxima():number{
 
 
 
-
-}

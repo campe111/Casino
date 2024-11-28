@@ -26,15 +26,15 @@ export abstract class SlotsSTD extends Juego implements Apuesta {
 
     // Métodos de la Interfaz Apuesta
     dineroGanado(): number{
-        
+        return 2000
     }
     dineroPerdido():number{
-
+        return 4
     }
     apuestaMinima():number{
-
+        return 500
     }
     apuestaMaxima():number{
-
+        return 3000;
     }
 }
