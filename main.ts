@@ -1,16 +1,16 @@
 import { Usuario } from "./Usuario";
 import { Juego } from "./Juego";
 import { Casino }from "./Casino";
+import { SlotsPrem } from "./SlotsPrem";
 
 const casino = new Casino();
-const juego = new Juego("slots", "Std", "un millon de dolares", 100, 0, 0, 0, 0);
+const slotcito = new SlotsPrem("slots", "Std",100,4,6 );
+slotcito.iniciarJuego();
+
 
 casino.mostrarJuegosDisponibles();
 
-const usuario2 = new Usuario("campe", 25, 5000, 28);
-console.log(`El usuario ${usuario2.getNombreUsuario()} eligio jugar a ${juego.getNombre()}`);
 
-usuario2.validarEdad(28);
 
 
 
