@@ -1,5 +1,5 @@
-import { Apuesta } from "./interfaz";
-import { Juego } from "./juego";
+import { Apuesta } from "./Interfaz";
+import { Juego } from "./Juego";
 class BlackJack extends Juego implements Apuesta {
     private apuestaActual: number;
     private saldoGanado: number;
