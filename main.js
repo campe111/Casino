@@ -8,7 +8,7 @@ var SlotsSTD_1 = require("./SlotsSTD");
 //console.log(`El usuario ${usuario2.getNombreUsuario()} eligio jugar a ${juego.getNombre()}`);
 ///usuario2.validarEdad(28);
 var tragamonedas = new SlotsSTD_1.SlotsSTD("Máquina de Slots", "Casino", 0);
-tragamonedas.realizarApuesta(10); // Realizar una apuesta de 50
+tragamonedas.realizarApuesta(20); // Realizar una apuesta de 50
 tragamonedas.jugar(); // Jugar
 console.log("Dinero ganado:", tragamonedas.dineroGanado());
 console.log("Dinero perdido:", tragamonedas.dineroPerdido());

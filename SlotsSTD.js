@@ -21,11 +21,11 @@ var SlotsSTD = /** @class */ (function (_super) {
     __extends(SlotsSTD, _super);
     function SlotsSTD(nombre, tipoDeJuego, premio) {
         var _this = _super.call(this, nombre, tipoDeJuego, premio) || this; // Llamamos al constructor de la clase padre
-        _this.rodillos = ["A", "B", "C", "D", "F"]; // Posibles símbolos
+        _this.rodillos = ["A", "B", "C", "D", "E"]; // Posibles símbolos
         _this.apuestaActual = 0; // Al principio no hay apuesta
         _this.saldoGanado = 0; // No se ha ganado nada todavía
         _this.saldoPerdido = 0; // No se ha perdido nada todavía
-        _this.apuestaMinimaPermitida = 20; //apuesta mínima de 10
+        _this.apuestaMinimaPermitida = 20; //apuesta mínima de 20
         _this.apuestaMaximaPermitida = 500; // apuesta máxima de 500
         return _this;
     }
@@ -60,7 +60,7 @@ var SlotsSTD = /** @class */ (function (_super) {
     };
     // Método para jugar (simula una tirada)
     SlotsSTD.prototype.jugar = function () {
-        if (this.apuestaActual === 0) { // Verificar si no se ha realizado ninguna apuesta
+        if (this.apuestaActual === 0) { // Verifica si no se ha realizado ninguna apuesta
             console.log("Debes realizar una apuesta antes de jugar.");
             return;
         }
@@ -68,19 +68,23 @@ var SlotsSTD = /** @class */ (function (_super) {
         var resultado = [
             this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
             this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
-            this.rodillos[Math.floor(Math.random() * this.rodillos.length)]
+            this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
         ];
         console.log("Resultado:", resultado);
-        // Si los 3 símbolos son iguales, ganas
+        // Si los 4 símbolos son iguales, ganas
         if (resultado[0] === resultado[1] && resultado[1] === resultado[2]) {
             console.log("¡Ganaste!");
-            this.saldoGanado += this.apuestaActual * 2; // Ganas el doble de tu apuesta
+            this.saldoGanado += this.apuestaActual * 4;
+            //Si los 2 símbolos son iguales, ganas
+        }
+        else if (resultado[0] === resultado[1] || resultado[1] === resultado[2] || resultado[0] === resultado[2]) {
+            console.log("¡Ganaste! Dos símbolos iguales.");
+            this.saldoGanado += this.apuestaActual * 2;
         }
         else {
             console.log("Perdiste.");
             this.saldoPerdido += this.apuestaActual; // Pierdes lo que apostaste
         }
-        this.apuestaActual = 0; // Reseteamos la apuesta actual
     };
     return SlotsSTD;
 }(Juego_1.Juego));
