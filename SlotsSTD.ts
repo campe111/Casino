@@ -67,6 +67,7 @@ jugar(): void {
     const resultado = [
         this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
         this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
+        this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
         this.rodillos[Math.floor(Math.random() * this.rodillos.length)]
     ];
 
