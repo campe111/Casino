@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
 
@@ -38,3 +39,5 @@ export abstract class SlotsSTD extends Juego implements Apuesta {
         return 3000;
     }
 }
+=======
+>>>>>>> 333e960759c257432e718fc405c3444b53b12ed4
