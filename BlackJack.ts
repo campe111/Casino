@@ -1,3 +1,7 @@
+import { Apuesta } from "./Interfaz";
+import { Juego } from "./Juego";
+
+
 class BlackJack extends Juego implements Apuesta {
     mano: number[] = [];
     saldo: number;
@@ -89,4 +93,5 @@ class BlackJack extends Juego implements Apuesta {
         return 100; // Ejemplo: Monto mínimo de apuesta es 100
     }
 }
-export { BlackJack };
+export { BlackJack }; 
+
