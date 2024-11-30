@@ -1,5 +1,8 @@
-var BingoGame = /** @class */ (function () {
-    function BingoGame() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bingo = void 0;
+var Bingo = /** @class */ (function () {
+    function Bingo() {
         this.carton = [];
         this.bolasLlamadas = [];
         this.bolasMarcadas = [];
@@ -7,7 +10,7 @@ var BingoGame = /** @class */ (function () {
         this.bolasLlamadas = this.generarBolas();
     }
     // Genera el cartón de bingo (15 números entre 1 y 90)
-    BingoGame.prototype.generarCarton = function () {
+    Bingo.prototype.generarCarton = function () {
         var carton = [];
         while (carton.length < 15) {
             var numero = Math.floor(Math.random() * 90) + 1;
@@ -19,7 +22,7 @@ var BingoGame = /** @class */ (function () {
         return carton;
     };
     // Genera las bolas sorteadas (90 bolas posibles)
-    BingoGame.prototype.generarBolas = function () {
+    Bingo.prototype.generarBolas = function () {
         var bolas = [];
         while (bolas.length < 90) {
             var bola = Math.floor(Math.random() * 90) + 1;
@@ -30,7 +33,7 @@ var BingoGame = /** @class */ (function () {
         return bolas;
     };
     // Función para mostrar el cartón con los números marcados
-    BingoGame.prototype.mostrarCarton = function () {
+    Bingo.prototype.mostrarCarton = function () {
         var _this = this;
         var cartonMarcado = this.carton.map(function (num) {
             return _this.bolasMarcadas.includes(num) ? "".concat(num, " (Marcado)") : "".concat(num);
@@ -39,7 +42,7 @@ var BingoGame = /** @class */ (function () {
         console.table(cartonMarcado.join(' '));
     };
     // Función principal del juego
-    BingoGame.prototype.jugar = function () {
+    Bingo.prototype.jugar = function () {
         console.log("¡Comienza el juego de Bingo!");
         var bingo = false;
         this.mostrarCarton();
@@ -66,8 +69,6 @@ var BingoGame = /** @class */ (function () {
             console.log("El juego ha terminado, pero no hay Bingo.");
         }
     };
-    return BingoGame;
+    return Bingo;
 }());
-// Crear una instancia del juego y ejecutarlo
-var juego = new BingoGame();
-juego.jugar();
+exports.Bingo = Bingo;

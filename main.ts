@@ -1,18 +1,42 @@
-import { Juego } from "./Juego";
-import {BlackJack} from "./BlackJack";
-import { Apuesta } from "./Interfaz";
-import {Casino} from "./Casino";
+import * as readline from "readline";
+import { BlackJack } from "./BlackJack";
+import { Bingo } from "./Bingo";
 
-// Ejemplo de uso
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
 
+function mostrarMenu(): void {
+    console.log("--- Casino King Of Coins ---");
+    console.log("1. Jugar al blackjack");
+    console.log("2. Jugar al bingo");
+    console.log("3. Salir");
+    const bingo = new Bingo();
+    const blackJack = new BlackJack("Blackjack", "BlackJack", 1000, 100);
+    rl.question("Seleccione una opcion: ", (opcion) => {
+        switch (opcion) {
+            case "1":
+                blackJack.iniciarJuego();
+                blackJack.repartirCartas(2);
+                blackJack.plantarse();
+                blackJack.calcularSumaDeCartas();
+                break;
 
-const blackjack = new BlackJack("Mi Casino", "BlackJack", 500000, 10000);
-blackjack.repartirCartas(3); // Ahora reparte 4 cartas en lugar de 2
-console.log(blackjack.mano); // Muestra las cartas repartidas
-
-blackjack.plantarse(); // El jugador decide plantarse
-
-blackjack.realizarApuesta(2000); // Realiza una apuesta
-console.log(`Dinero ganado: $${blackjack.dineroGanado()}`);
-console.log(`Dinero perdido: $${blackjack.dineroPerdido()}`);
-
+        }
+        volverAlMenuPrincipal();
+    });
+}
+// Función para volver al menú principal
+function volverAlMenuPrincipal(): void {
+    rl.question("\n¿Desea volver al menú principal? (si/no): ", (respuesta) => {
+        if (respuesta.toLowerCase() === "si") {
+            mostrarMenu();
+        } else {
+            console.log("¡Gracias por jugar!");
+            rl.close();
+        }
+    });
+}
+mostrarMenu();
+volverAlMenuPrincipal();

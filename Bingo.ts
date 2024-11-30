@@ -75,8 +75,6 @@ class Bingo {
         }
     }
 }
-
-// Crear una instancia del juego y ejecutarlo
-
+export { Bingo };
 
 
