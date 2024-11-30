@@ -1,4 +1,4 @@
-class BingoGame {
+class Bingo {
     private carton: number[] = [];
     private bolasLlamadas: number[] = [];
     private bolasMarcadas: number[] = [];
@@ -77,5 +77,6 @@ class BingoGame {
 }
 
 // Crear una instancia del juego y ejecutarlo
-const juego = new BingoGame();
-juego.jugar();
+
+
+
