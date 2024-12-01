@@ -20,20 +20,60 @@ var rl = readline.createInterface({
 });
 function mostrarMenu() {
     console.log("--- Casino King Of Coins ---");
-    console.log("1. Jugar al blackjack");
-    console.log("2. Jugar al bingo");
-    console.log("3. Salir");
+    console.log("1. Jugar al Blackjack");
+    console.log("2. Jugar al Bingo");
+    console.log("3. Jugar al Slot Machine");
+    console.log("4. Jugar al Slot de la Casa");
+    console.log("5. Salir");
+    var blackJack = new BlackJack_1.BlackJack("Blackjack", "BlackJack", 100000, 10000);
     var bingo = new Bingo_1.Bingo();
-    var blackJack = new BlackJack_1.BlackJack("Blackjack", "BlackJack", 1000, 100);
+    var apuesta = blackJack;
+    console.log("\n");
     rl.question("Seleccione una opcion: ", function (opcion) {
         switch (opcion) {
             case "1":
+                console.log("\n");
+                blackJack.instruccionJuego();
                 blackJack.iniciarJuego();
-                blackJack.repartirCartas(2);
+                blackJack.realizarApuesta(1500);
+                apuesta.dineroGanado();
+                blackJack.repartirCartas(3);
                 blackJack.plantarse();
                 blackJack.calcularSumaDeCartas();
+                blackJack.finalizarJuego();
+                rl.question("\n¿Desea jugar otra vez? (si/no): ", function (respuesta) {
+                    if (respuesta.toLowerCase() === "si") {
+                        blackJack.iniciarJuego();
+                        blackJack.realizarApuesta(1500);
+                        blackJack.repartirCartas(2);
+                        blackJack.plantarse();
+                        blackJack.calcularSumaDeCartas();
+                        blackJack.finalizarJuego();
+                    }
+                    else {
+                        console.log("¡Gracias por jugar!");
+                    }
+                });
+                break;
+            case "2":
+                bingo.jugar();
+                break;
+            case "3":
+                console.log("Slot Machine no disponible");
+                break;
+            case "4":
+                console.log("Slot de la Casa no disponible");
+                break;
+            case "5":
+                console.log("Saliendo del juego");
+                rl.close();
+                break;
+            default:
+                console.log("Opcion no valida");
+                mostrarMenu();
                 break;
         }
+        console.log("\n");
         volverAlMenuPrincipal();
     });
 }
