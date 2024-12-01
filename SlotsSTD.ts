@@ -1,6 +1,8 @@
 import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
 
+
+
 export class SlotsSTD extends Juego implements Apuesta {
     protected rodillos: string[]; // Símbolos del juego
     protected apuestaActual: number; // Cantidad apostada en este momento
