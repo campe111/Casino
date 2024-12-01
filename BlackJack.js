@@ -21,11 +21,7 @@ var BlackJack = /** @class */ (function (_super) {
     __extends(BlackJack, _super);
     function BlackJack(nombre, tipoDeJuego, premio, saldo) {
         var _this = _super.call(this, nombre, tipoDeJuego, premio) || this;
-        _this.mano = [];
-        _this.ganancias = 0;
-        _this.perdidas = 0;
-        _this.saldo = saldo;
-        _this.resultado = '';
+
         return _this;
     }
     BlackJack.prototype.repartirCartas = function (numeroDeCartas) {
@@ -34,9 +30,7 @@ var BlackJack = /** @class */ (function (_super) {
         for (var i = 0; i < numeroDeCartas; i++) {
             this.mano.push(this.generarCartaAleatoria());
         }
-    };
-    BlackJack.prototype.plantarse = function () {
-        this.calcularSumaDeCartas(); // Calcula la suma al plantarse
+
     };
     BlackJack.prototype.calcularSumaDeCartas = function () {
         var suma = 0;
@@ -58,13 +52,7 @@ var BlackJack = /** @class */ (function (_super) {
         if (tieneAs && suma > 21) {
             suma -= 10; // El As pasa a valer 1 en lugar de 11
         }
-        if (suma > 21) {
-            this.perdidas += this.saldo; // Registrando la pérdida
-            this.resultado = 'Perdiste, te pasaste de 21.';
-        }
-        else {
-            this.ganancias += this.saldo; // Registrando la ganancia
-            this.resultado = "La suma de tus cartas es ".concat(suma, ".");
+
         }
         console.log(this.resultado); // Mostrar el resultado
     };
@@ -80,6 +68,7 @@ var BlackJack = /** @class */ (function (_super) {
         }
         else if (monto <= this.saldo) {
             this.saldo -= monto;
+
             console.log("Apuesta realizada con \u00E9xito. Monto apostado: $".concat(monto));
         }
         else {
@@ -93,7 +82,7 @@ var BlackJack = /** @class */ (function (_super) {
         return this.perdidas;
     };
     BlackJack.prototype.apuestaMinima = function () {
-        return 10; // Ejemplo: Monto mínimo de apuesta es 10
+
     };
     return BlackJack;
 }(Juego_1.Juego));

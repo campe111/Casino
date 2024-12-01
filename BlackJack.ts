@@ -3,14 +3,12 @@ import { Juego } from "./Juego";
 class BlackJack extends Juego implements Apuesta {
     mano: number[] = [];
     saldo: number;
-    resultado: string;
-    private ganancias: number = 0;
-    private perdidas: number = 0;
+
 
     constructor(nombre: string, tipoDeJuego: string, premio: number, saldo: number) {
         super(nombre, tipoDeJuego, premio);
         this.saldo = saldo;
-        this.resultado = '';
+
     }
 
     repartirCartas(numeroDeCartas: number = 2): void {
@@ -18,11 +16,7 @@ class BlackJack extends Juego implements Apuesta {
         for (let i = 0; i < numeroDeCartas; i++) {
             this.mano.push(this.generarCartaAleatoria());
         }
-    }
 
-    plantarse(): void {
-        this.calcularSumaDeCartas(); // Calcula la suma al plantarse
-    }
 
     calcularSumaDeCartas(): void {
         let suma = 0;
@@ -44,15 +38,6 @@ class BlackJack extends Juego implements Apuesta {
             suma -= 10; // El As pasa a valer 1 en lugar de 11
         }
 
-        if (suma > 21) {
-            this.perdidas += this.saldo; // Registrando la pérdida
-            this.resultado = 'Perdiste, te pasaste de 21.';
-        } else {
-            this.ganancias += this.saldo; // Registrando la ganancia
-            this.resultado = `La suma de tus cartas es ${suma}.`;
-        }
-
-        console.log(this.resultado); // Mostrar el resultado
     }
 
     // Método para generar una carta aleatoria
@@ -67,6 +52,7 @@ class BlackJack extends Juego implements Apuesta {
             console.log("Saldo insuficiente para realizar la apuesta.");
         } else if (monto <= this.saldo) {
             this.saldo -= monto;
+
             console.log(`Apuesta realizada con éxito. Monto apostado: $${monto}`);
         } else {
             console.log("Saldo insuficiente.");
@@ -82,7 +68,8 @@ class BlackJack extends Juego implements Apuesta {
     }
 
     apuestaMinima(): number {
-        return 10; // Ejemplo: Monto mínimo de apuesta es 10
+
+        return 100; // Ejemplo: Monto mínimo de apuesta es 100
     }
 }
 

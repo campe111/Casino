@@ -1,34 +1,42 @@
-import { Usuario } from "./Usuario";
-import { Juego } from "./Juego";
-import { Casino }from "./Casino";
-import { SlotsSTD } from "./SlotsSTD";
+import * as readline from "readline";
+import { BlackJack } from "./BlackJack";
+import { Bingo } from "./Bingo";
 
-//const casino = new Casino();
-//const juego = new Juego("slots", "Std", 100);
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
 
-//casino.mostrarJuegosDisponibles();
+function mostrarMenu(): void {
+    console.log("--- Casino King Of Coins ---");
+    console.log("1. Jugar al blackjack");
+    console.log("2. Jugar al bingo");
+    console.log("3. Salir");
+    const bingo = new Bingo();
+    const blackJack = new BlackJack("Blackjack", "BlackJack", 1000, 100);
+    rl.question("Seleccione una opcion: ", (opcion) => {
+        switch (opcion) {
+            case "1":
+                blackJack.iniciarJuego();
+                blackJack.repartirCartas(2);
+                blackJack.plantarse();
+                blackJack.calcularSumaDeCartas();
+                break;
 
-//const usuario2 = new Usuario("mari", 25, 5000, 28);
-//console.log(`El usuario ${usuario2.getNombreUsuario()} eligio jugar a ${juego.getNombre()}`);
-
-///usuario2.validarEdad(28);
-
-
-const tragamonedas = new SlotsSTD("Máquina de Slots", "Casino", 0);
-
-tragamonedas.realizarApuesta(20); // Realizar una apuesta de 50
-tragamonedas.jugar(); // Jugar
-
-console.log("Dinero ganado:", tragamonedas.dineroGanado());
-console.log("Dinero perdido:", tragamonedas.dineroPerdido());
-
-
-
- //const usuario = new Usuario("Juan", 25, 1000, 18);
-//const juego = new Juego("slots", "Std", "un millon de dolares", 100, 0, 0, 0, 0);
-
- //usuario.validarEdad(18);
-// usuario.agregarSaldo(1000);
- //console.log(`El jugador ${usuario.getNombreUsuario()} tiene ${juego.getPremio()} como premio`);
- //console.log(`Jugando al juego ${juego.getNombre()}`);
-
+        }
+        volverAlMenuPrincipal();
+    });
+}
+// Función para volver al menú principal
+function volverAlMenuPrincipal(): void {
+    rl.question("\n¿Desea volver al menú principal? (si/no): ", (respuesta) => {
+        if (respuesta.toLowerCase() === "si") {
+            mostrarMenu();
+        } else {
+            console.log("¡Gracias por jugar!");
+            rl.close();
+        }
+    });
+}
+mostrarMenu();
+volverAlMenuPrincipal();
