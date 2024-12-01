@@ -1,14 +1,6 @@
 import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
 
-
-
-export abstract class SlotsSTD extends Juego implements Apuesta {
-    //modificar segun logica de wanda
-    protected rodillos:string [];
-    protected combinaciones:string [][]
-    protected apuestaActual: number;
-    protected saldoGanado: number;
 export class SlotsSTD extends Juego implements Apuesta {
     protected rodillos: string[]; // Símbolos del juego
     protected apuestaActual: number; // Cantidad apostada en este momento
