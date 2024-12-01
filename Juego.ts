@@ -11,6 +11,8 @@ export  abstract class Juego {
         this.premio = premio;
         this.estado = "sin iniciar";
     }
+    //Metodo abstracto
+    abstract realizarApuesta(monto:number):void;
 
     //Metodos
     iniciarJuego(): void {

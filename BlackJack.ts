@@ -1,6 +1,5 @@
-import { Juego } from "./Juego";
 import { Apuesta } from "./Interfaz";
-
+import { Juego } from "./Juego";
 class BlackJack extends Juego implements Apuesta {
     mano: number[] = [];
     saldo: number;
