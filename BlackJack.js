@@ -21,13 +21,7 @@ var BlackJack = /** @class */ (function (_super) {
     __extends(BlackJack, _super);
     function BlackJack(nombre, tipoDeJuego, premio, saldo) {
         var _this = _super.call(this, nombre, tipoDeJuego, premio) || this;
-        _this.mano = [];
-        _this.resultado = '';
-        _this.ganancias = 0;
-        _this.perdidas = 0;
-        _this.apuestaActual = 0;
-        _this.juegoEnCurso = false;
-        _this.saldo = saldo;
+
         return _this;
     }
     BlackJack.prototype.repartirCartas = function (numeroDeCartas) {
@@ -36,12 +30,7 @@ var BlackJack = /** @class */ (function (_super) {
         for (var i = 0; i < numeroDeCartas; i++) {
             this.mano.push(this.generarCartaAleatoria());
         }
-        this.juegoEnCurso = true;
-    };
-    BlackJack.prototype.plantarse = function () {
-        if (this.juegoEnCurso) {
-            this.calcularSumaDeCartas(); // Calcula la suma al plantarse
-        }
+
     };
     BlackJack.prototype.calcularSumaDeCartas = function () {
         var suma = 0;
@@ -63,14 +52,7 @@ var BlackJack = /** @class */ (function (_super) {
         if (tieneAs && suma > 21) {
             suma -= 10; // El As pasa a valer 1 en lugar de 11
         }
-        // Actualización de las ganancias y pérdidas en función de la apuesta
-        if (suma > 21) {
-            this.perdidas += this.apuestaActual; // Registrando la pérdida
-            this.resultado = 'Perdiste, te pasaste de 21.';
-        }
-        else {
-            this.ganancias += this.apuestaActual * this.premio; // Registrando la ganancia
-            this.resultado = "La suma de tus cartas es ".concat(suma, ". Ganaste $").concat(this.apuestaActual * this.premio, ".");
+
         }
         console.log(this.resultado); // Mostrar el resultado
     };
@@ -86,7 +68,7 @@ var BlackJack = /** @class */ (function (_super) {
         }
         else if (monto <= this.saldo) {
             this.saldo -= monto;
-            this.apuestaActual = monto; // Registrar la apuesta actual
+
             console.log("Apuesta realizada con \u00E9xito. Monto apostado: $".concat(monto));
         }
         else {
@@ -100,7 +82,7 @@ var BlackJack = /** @class */ (function (_super) {
         return this.perdidas;
     };
     BlackJack.prototype.apuestaMinima = function () {
-        return 100; // Ejemplo: Monto mínimo de apuesta es 100
+
     };
     return BlackJack;
 }(Juego_1.Juego));
