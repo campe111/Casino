@@ -1,9 +1,17 @@
-class Bingo {
+import { Apuesta } from "./Interfaz";
+import { Juego } from "./Juego";
+
+class Bingo extends Juego implements Apuesta {
     private carton: number[] = [];
     private bolasLlamadas: number[] = [];
     private bolasMarcadas: number[] = [];
+    private apuestaActual: number = 0;
+    private ganancias: number = 0;
+    private perdidas: number = 0;
+    protected premio: number = 10000;  // Premio fijo 
 
     constructor() {
+        super("Bingo", "Juego de Casino", 100);
         this.carton = this.generarCarton();
         this.bolasLlamadas = this.generarBolas();
     }
@@ -67,14 +75,47 @@ class Bingo {
                 break;
             }
         }
-
-        if (bingo) {
+            if (bingo) {
             console.log("¡Bingo! Has marcado todos los números.");
+            // Aquí ganaste el premio
+            this.ganancias = this.premio;
+            console.log(`¡Has ganado ${this.ganancias}!`);
         } else {
             console.log("El juego ha terminado, pero no hay Bingo.");
+            this.ganancias = 0;  // No se gana nada si no hay Bingo
+        } 
+    } 
+
+    // Métodos de la interfaz Apuesta
+    realizarApuesta(monto: number): void {
+        if (monto < this.apuestaMinima()) {
+            console.log(`La apuesta mínima es ${this.apuestaMinima()} y no has alcanzado ese monto.`);
+            return;
         }
+
+        this.apuestaActual = monto;
+        console.log(`Apuesta de ${monto} realizada en el juego ${this.nombre}.`);
+    }
+
+    dineroGanado(): number {
+        // Se ha calculado el premio al ganar el Bingo
+        return this.ganancias;
+    }
+
+    dineroPerdido(): number {
+        // Se calcula la pérdida 
+        this.perdidas = this.apuestaActual - this.ganancias;  // La diferencia entre lo apostado y lo ganado
+        return this.perdidas;
+    }
+
+    apuestaMinima(): number {
+        return 2500; // Ejemplo: Monto mínimo de apuesta es 2500
     }
 }
-export { Bingo };
 
-
+// Simulación del juego
+const bingo = new Bingo();
+bingo.realizarApuesta(5000);  // Realiza una apuesta
+bingo.jugar();                // Juega el Bingo
+console.log(`Dinero ganado: ${bingo.dineroGanado()}`);  // Verifica cuánto se ha ganado
+console.log(`Dinero perdido: ${bingo.dineroPerdido()}`);  // Verifica la pérdida
