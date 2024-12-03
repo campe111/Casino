@@ -37,7 +37,7 @@ export class SlotsSTD extends Juego implements Apuesta {
 
     // Método para obtener el dinero ganado
     dineroGanado(): number {
-        return this.saldoGanado; // Devolvemos el saldo ganado
+        return this.saldoGanado += this.apuestaActual; // Devolvemos el saldo ganado
     }
 
     // Método para obtener el dinero perdido
@@ -56,36 +56,44 @@ export class SlotsSTD extends Juego implements Apuesta {
     }
 
 
-    // Método para jugar (simula una tirada)
+
+    // Método para generar el resultado (modularización)
+     generarResultado(cantidadDeRodillos: number = 4): string[] {
+        return Array.from({ length: cantidadDeRodillos }, () =>
+            this.rodillos[Math.floor(Math.random() * this.rodillos.length)]
+        );
+    }
+
+
+    // Método para jugar (usando generarResultado)
     jugar(): void {
-        if (this.apuestaActual === 0) { // Verifica si no se ha realizado ninguna apuesta
+        if (this.apuestaActual === 0) {
             console.log("Debes realizar una apuesta antes de jugar.");
             return;
         }
 
-        // Generamos 3 símbolos aleatorios
-        const resultado = [
-            this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
-            this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
-            this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
-            this.rodillos[Math.floor(Math.random() * this.rodillos.length)],
-
-        ];
+        // Generamos el resultado con 6 rodillos
+        const resultado = this.generarResultado(6);
 
         console.log("Resultado:", resultado);
 
-        // Si los 4 símbolos son iguales, ganas
-        if (resultado[0] === resultado[1] && resultado[1] === resultado[2]) {
-            console.log("¡Ganaste!");
-            this.saldoGanado += this.apuestaActual * 4;
-            //Si los 2 símbolos son iguales, ganas
-        } else if (resultado[0] === resultado[1] || resultado[1] === resultado[2] || resultado[0] === resultado[2]) {
-            console.log("¡Ganaste! Dos símbolos iguales.");
-            this.saldoGanado += this.apuestaActual * 2;
+        // Si los 6 símbolos son iguales
+        if (resultado.every((simbolo) => simbolo === resultado[0])) {
+            console.log("¡Jackpot! Los 6 símbolos son iguales.");
+            this.saldoGanado += this.apuestaActual * 10; // Gran premio con multiplicador x10
+        } else if (new Set(resultado).size === 3) {
+            console.log("¡Ganaste! Tres pares iguales.");
+            this.saldoGanado += this.apuestaActual * 3; // Premio por 3 pares iguales
         } else {
             console.log("Perdiste.");
             this.saldoPerdido += this.apuestaActual; // Pierdes lo que apostaste
         }
+    }
+
+    instruccionJuego(): void {
+        console.log(
+            `Instrucciones del juego "${this.nombre}": Este es un juego de tipo "${this.tipoDeJuego}". Sigue las reglas si deseas ganar el premio de ${this.premio} puntos.`
+        );
     }
 }
 
