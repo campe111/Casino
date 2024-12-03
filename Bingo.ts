@@ -112,10 +112,4 @@ class Bingo extends Juego implements Apuesta {
         return 2500; // Ejemplo: Monto mínimo de apuesta es 2500
     }
 }
-
-// Simulación del juego
-const bingo = new Bingo();
-bingo.realizarApuesta(5000);  // Realiza una apuesta
-bingo.jugar();                // Juega el Bingo
-console.log(`Dinero ganado: ${bingo.dineroGanado()}`);  // Verifica cuánto se ha ganado
-console.log(`Dinero perdido: ${bingo.dineroPerdido()}`);  // Verifica la pérdida
+export { Bingo };

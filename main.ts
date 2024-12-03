@@ -19,12 +19,13 @@ function mostrarMenu(): void {
 
     const bingo = new Bingo();
     const blackJack = new BlackJack("Blackjack", "BlackJack", 1000, 100);
-    const slotsSTD = new SlotsSTD("Slots Standard", "Máquina de Slots", 5000); //Nombre, TipodeJuego, Premio
-    const slotsPrem = new SlotsPrem("Slots Premium", "Máquina de Slots", 10000, 8);//Nombre, TipodeJuego, Premio, Multiplicador
-
+    const slotsStd = new SlotsSTD("Tragamonedas", "STD", 1000);
+    const slotsPremium = new SlotsPrem("Tragamonedas Premium", "Premium", 10000, 10, 50);
     rl.question("Seleccione una opcion: ", (opcion) => {
         switch (opcion) {
             case "1":
+                bingo.jugar();
+                case "2":
                 blackJack.iniciarJuego();
                 blackJack.repartirCartas(2);
                 blackJack.plantarse();
@@ -41,7 +42,19 @@ function mostrarMenu(): void {
                 slotsSTD.finalizarJuego();
                 
                 break;
-
+            case "2":
+                blackJack.iniciarJuego();
+                blackJack.repartirCartas(2);
+                blackJack.plantarse();
+                blackJack.calcularSumaDeCartas();
+                blackJack.finalizarJuego();
+                break;
+            case "3":
+                slotsStd.jugar();
+                break;
+            case "4":
+                slotsPremium.jugar();
+                break;
         }
         volverAlMenuPrincipal();
     });
