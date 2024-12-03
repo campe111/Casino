@@ -17,22 +17,23 @@ function mostrarMenu(): void {
     console.log("4. Jugar al Slots Premium");
     console.log("5. Salir");
 
-    const bingo = new Bingo();
     const blackJack = new BlackJack("Blackjack", "BlackJack", 1000, 100);
-    const slotsStd = new SlotsSTD("Tragamonedas", "STD", 1000);
-    const slotsPremium = new SlotsPrem("Tragamonedas Premium", "Premium", 10000, 10, 50);
+    const bingo = new Bingo();
+    const slotsSTD = new SlotsSTD("Tragamonedas", "STD", 1000);
+    const slotsPremium = new SlotsPrem("Tragamonedas Premium", "Premium", 10000, 10);
     rl.question("Seleccione una opcion: ", (opcion) => {
         switch (opcion) {
             case "1":
-                bingo.jugar();
-                case "2":
                 blackJack.iniciarJuego();
                 blackJack.repartirCartas(2);
                 blackJack.plantarse();
                 blackJack.calcularSumaDeCartas();
-
             case "2":
                 bingo.jugar();
+                bingo.realizarApuesta(1000);
+                bingo.iniciarJuego();
+                bingo.dineroGanado();
+                bingo.finalizarJuego();
             case "3":
                 slotsSTD.instruccionJuego();
                 slotsSTD.realizarApuesta(80);     //Paso el monto que deseo apostar
@@ -40,20 +41,12 @@ function mostrarMenu(): void {
                 slotsSTD.jugar();
                 slotsSTD.dineroGanado();
                 slotsSTD.finalizarJuego();
-                
-                break;
-            case "2":
-                blackJack.iniciarJuego();
-                blackJack.repartirCartas(2);
-                blackJack.plantarse();
-                blackJack.calcularSumaDeCartas();
-                blackJack.finalizarJuego();
-                break;
-            case "3":
-                slotsStd.jugar();
                 break;
             case "4":
                 slotsPremium.jugar();
+                slotsPremium.realizarApuesta(1000);
+                slotsPremium.iniciarJuego();
+                slotsPremium.finalizarJuego();
                 break;
         }
         volverAlMenuPrincipal();
