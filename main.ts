@@ -63,5 +63,6 @@ function volverAlMenuPrincipal(): void {
         }
     });
 }
+
 mostrarMenu();
 volverAlMenuPrincipal();
