@@ -13,7 +13,10 @@ function mostrarMenu(): void {
     console.log("--- Casino King Of Coins ---");
     console.log("1. Jugar al blackjack");
     console.log("2. Jugar al bingo");
-    console.log("3. Salir");
+    console.log("3. Jugar al Slots Standard");
+    console.log("4. Jugar al Slots Premium");
+    console.log("5. Salir");
+
     const bingo = new Bingo();
     const blackJack = new BlackJack("Blackjack", "BlackJack", 1000, 100);
     const slotsStd = new SlotsSTD("Tragamonedas", "STD", 1000);
@@ -27,6 +30,17 @@ function mostrarMenu(): void {
                 blackJack.repartirCartas(2);
                 blackJack.plantarse();
                 blackJack.calcularSumaDeCartas();
+
+            case "2":
+                bingo.jugar();
+            case "3":
+                slotsSTD.instruccionJuego();
+                slotsSTD.realizarApuesta(80);     //Paso el monto que deseo apostar
+                slotsSTD.iniciarJuego();
+                slotsSTD.jugar();
+                slotsSTD.dineroGanado();
+                slotsSTD.finalizarJuego();
+                
                 break;
             case "2":
                 blackJack.iniciarJuego();
