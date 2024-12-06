@@ -3,6 +3,13 @@ import { BlackJack } from "./BlackJack";
 import { Bingo } from "./Bingo";
 import { SlotsSTD } from "./SlotsSTD";
 import { SlotsPrem } from "./SlotsPrem";
+import { Casino } from "./Casino";
+
+const casino = new Casino();
+casino.registrarUsuario("Brian", 25, 18, 1000);
+casino.accederUsuario("Brian")
+casino.mostrarInfoUsuario("Brian");
+
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -16,6 +23,7 @@ function mostrarMenu(): void {
     console.log("3. Jugar al Slots Standard");
     console.log("4. Jugar al Slots Premium");
     console.log("5. Salir");
+    console.log("----------------------------");
 
     const blackJack = new BlackJack("Blackjack", "BlackJack", 1000, 100);
     const bingo = new Bingo();
@@ -28,12 +36,16 @@ function mostrarMenu(): void {
                 blackJack.repartirCartas(2);
                 blackJack.plantarse();
                 blackJack.calcularSumaDeCartas();
+                blackJack.cargarSaldo(100);
+                blackJack.restarSaldo(50);
+                break;
             case "2":
                 bingo.jugar();
                 bingo.realizarApuesta(1000);
                 bingo.iniciarJuego();
                 bingo.dineroGanado();
                 bingo.finalizarJuego();
+                break;
             case "3":
                 slotsSTD.instruccionJuego();
                 slotsSTD.realizarApuesta(80);     //Paso el monto que deseo apostar

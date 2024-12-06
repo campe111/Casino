@@ -3,49 +3,58 @@ export class Usuario {
     private dni: number;
     private edad: number;
     private saldo: number;
-    static validarEdad: any;
 
-    constructor(nombreUsuario: string, dni: number, saldo: number, edad: number) {
+    constructor(nombreUsuario: string, dni: number, edad: number, saldo: number) {
         this.nombreUsuario = nombreUsuario;
         this.dni = dni;
         this.edad = edad;
         this.saldo = saldo;
     }
+    
 
-    getNombreUsuario(): string {
+    // Métodos de Usuario
+    public getNombreUsuario(): string {
         return this.nombreUsuario;
     }
 
-    getDni(): number {
+    public getDni(): number {
         return this.dni;
     }
 
-    getEdad(): number {
+    public getEdad(): number {
         return this.edad;
     }
 
-    getSaldo(): number {
+    public getSaldo(): number {
         return this.saldo;
     }
 
-    agregarSaldo(cantidad: number): void {
+    public agregarSaldo(cantidad: number): void {
         this.saldo += cantidad;
     }
 
-    restarSaldo(cantidad: number): void {
-        this.saldo -= cantidad;
+    public restarSaldo(cantidad: number): void {
+        if (cantidad > this.saldo) {
+            console.log('Saldo insuficiente.');
+        } else {
+            this.saldo -= cantidad;
+        }
     }
 
-    mostrarSaldo(): void {
-        console.log(`El saldo de ${this.nombreUsuario} es ${this.saldo}`);
-    }
-
-    validarEdad(edad: number): void {
-        if (edad >= 18) {
-            console.log(`BIENVENIDO, ¡Suerte !${this.nombreUsuario}`);
-            
+    public validarEdad(): void {
+        if (this.edad >= 18) {
+            console.log(`BIENVENIDO, ¡Suerte! ${this.nombreUsuario}`);
         } else {
             console.log("¡No tienes edad suficiente para jugar!");
         }
+    }
+
+    public mostrarInfoUsuario(): void {
+        console.log(`Informacion de usuario: 
+        Nombre: ${this.nombreUsuario}
+        DNI:    ${this.dni}
+        Edad:   ${this.edad}
+        Saldo:  ${this.saldo}
+            `);
     }
 }
