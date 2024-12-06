@@ -44,7 +44,7 @@ class Bingo extends Juego implements Apuesta {
     // Función para mostrar el cartón con los números marcados
     private mostrarCarton(): void {
         const cartonMarcado = this.carton.map(num =>
-            this.bolasMarcadas.includes(num) ? `${num} (Marcado)` : `${num}`
+            this.bolasMarcadas.includes(num) ? `${num}❎` : `${num}`
         );
         console.table("Cartón de Bingo:");
         console.table(cartonMarcado.join(' '));
@@ -63,7 +63,7 @@ class Bingo extends Juego implements Apuesta {
             // Si la bola está en el cartón, la marcamos
             if (this.carton.includes(bola)) {
                 this.bolasMarcadas.push(bola);
-                console.log(`¡Marcado! Número: ${bola}`);
+                console.log(`¡Marcado! ${bola} ✅`);
             }
 
             // Mostrar el estado del cartón

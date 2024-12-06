@@ -2,17 +2,18 @@ import { Juego } from "./Juego";  // Suponemos que Juego es una clase base que y
 
 export class SlotsSTD extends Juego {
     protected rodillos: string[]; // Símbolos del juego
-    protected apuestaActual: number; // Cantidad apostada en este momento
+    protected apuestaActual: number =0; // Cantidad apostada en este momento
     protected saldoGanado: number; // Total de dinero ganado
     protected saldoPerdido: number; // Total de dinero perdido
-
+    
     constructor(nombre: string, tipoDeJuego: string, premio: number) {
         super(nombre, tipoDeJuego, premio); // Llamamos al constructor de la clase padre
         this.rodillos = ["A", "B", "C", "D", "E"]; // Posibles símbolos
         this.saldoGanado = 0; // No se ha ganado nada todavía
         this.saldoPerdido = 0; // No se ha perdido nada todavía
+        
     }
-
+    
     // Método para generar el resultado (modularización)
     generarResultado(cantidadDeRodillos: number = 4): string[] {
         return Array.from({ length: cantidadDeRodillos }, () =>
@@ -49,7 +50,7 @@ export class SlotsSTD extends Juego {
             `Instrucciones del juego "${this.nombre}": Este es un juego de tipo "${this.tipoDeJuego}". Sigue las reglas si deseas ganar el premio de ${this.premio} puntos.`
         );
     }
-}
+
 
     // Método para iniciar el juego (interacción con el usuario)
     iniciarJuego(): void {

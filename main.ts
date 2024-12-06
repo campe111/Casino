@@ -217,26 +217,26 @@ const mostrarInfoUsuario = async () => {
 };
 
 // Función para iniciar un juego
-const iniciarJuego = async (juego: string) => {
+const iniciarJuego = (juego: string) => {
     console.log(`Iniciando el juego: ${juego}`);
 
     switch (juego) {
         case 'Slots STD':
             const slots = new SlotsSTD('Slots STD', 'Juego de Casino', 100);  // Instancia del juego SlotsSTD
-            await slots.jugar();  // Llama al método jugar() del juego SlotsSTD
+            slots.jugar();  // Llama al método jugar() del juego SlotsSTD
             break;
         case 'Slots Premium':
             const slotsPrem = new SlotsPrem('Slots Premium', 'Juego de Casino', 100, 5);  // Instancia del juego Slots Premium
-            await slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
+            slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
             break;
         case 'Blackjack':
             const blackjack = new BlackJack('Blackjack', 'Juego de Casino', 100, 5);  // Instancia del juego Blackjack
             blackjack.repartirCartas(2);  // Reparte las cartas al comenzar el juego
-            await blackjack.jugar();  // Llama al método jugar() del juego Blackjack
+            blackjack.jugar();  // Llama al método jugar() del juego Blackjack
             break;
         case 'Bingo':
             const bingo = new Bingo();  // Instancia del juego Bingo
-            await bingo.jugar();  // Llama al método jugar() del juego Bingo
+            bingo.jugar();  // Llama al método jugar() del juego Bingo
             break;
         default:
             console.log('Opción no válida.');
