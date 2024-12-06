@@ -41,7 +41,7 @@ class Casino  {
         return false
     }
      // Método para obtener todos los usuarios registrados ----Wanda
-      getUsuarios(): Usuario[] {
+    getUsuarios(): Usuario[] {
         return this.usuarios;
     }
 
