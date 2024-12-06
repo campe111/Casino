@@ -11,8 +11,8 @@ class Casino  {
 // Metodo para registrar un usuario en el casino
     public registrarUsuario(nombreUsuario: string, dni: number, edad: number, saldo: number): void {
         for (let usuarios of this.usuarios) {
-            if (usuarios.getNombreUsuario() === nombreUsuario) {
-                console.log(`El usuario ${nombreUsuario} ya está registrado en este casino.`);
+            if (usuarios.getDni() === dni) { //verifica si el dni ya esta registrado ----- Wanda
+                console.log(`El usuario con ${dni} ya está registrado en este casino.`);
                 return;
             }
         }
@@ -31,6 +31,20 @@ class Casino  {
         }
         console.log('Usuario no encontrado.');
     }
+    //Metodo para buscar usuario por DNI como si fuera un ID --- Wanda
+    buscarUsuarioDni(dni: number):boolean{
+        for (const usuario of this.usuarios){
+            if(usuario.getDni() === dni){
+                return true
+            }
+        }
+        return false
+    }
+     // Método para obtener todos los usuarios registrados ----Wanda
+      getUsuarios(): Usuario[] {
+        return this.usuarios;
+    }
+
 // Me traigo el metodo publico de la clase Usuario para mostrar la informacion del usuario
     mostrarInfoUsuario(nombreUsuario: string): void {
         for (const usuario of this.usuarios) {

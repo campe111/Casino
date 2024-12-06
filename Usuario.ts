@@ -29,6 +29,16 @@ export class Usuario {
         return this.saldo;
     }
 
+    
+    public setEdad(edad : number) {
+        this.edad = edad;
+    }
+    
+    public setSaldo(saldo : number) {
+        this.saldo = saldo;
+    }
+    
+    
     public agregarSaldo(cantidad: number): void {
         this.saldo += cantidad;
     }

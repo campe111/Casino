@@ -12,6 +12,9 @@ export  abstract class Juego {
         this.tipoDeJuego = tipoDeJuego;
         this.premio = premio;
         this.estado = "sin iniciar";
+        this.billetera= 0;
+        this.billeteraActualizada= 0;
+
     }
 
     public cargarSaldo(cantidad: number): void {
@@ -23,6 +26,7 @@ export  abstract class Juego {
     public restarSaldo(cantidad: number): void {
         if (cantidad > this.billetera) {
             console.log('Saldo insuficiente en billetera.');
+            
         } else {
             this.billetera -= cantidad;
             this.billeteraActualizada = this.billetera;
@@ -30,7 +34,7 @@ export  abstract class Juego {
         }
     }
 
-    publicmostrarSaldo(): void {
+    public mostrarSaldo(): void {
         console.log(`Saldo actual en billetera: $${this.billetera}`);
     }
     //Metodo abstracto
