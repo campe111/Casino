@@ -15,7 +15,6 @@ class BlackJack extends Juego implements Apuesta {
         super(nombre, tipoDeJuego, premio);
         this.saldo = saldo;
     }
-
     repartirCartas(numeroDeCartas: number = 2): void {
         this.mano = [];
         for (let i = 0; i < numeroDeCartas; i++) {
@@ -94,4 +93,10 @@ class BlackJack extends Juego implements Apuesta {
     }
 }
 export { BlackJack }; 
-
+const blackJack = new BlackJack("Blackjack", "BlackJack", 1000, 100);
+blackJack.iniciarJuego();
+blackJack.repartirCartas(2);
+blackJack.plantarse();
+blackJack.calcularSumaDeCartas();
+blackJack.cargarSaldo(100);
+blackJack.restarSaldo(50);
