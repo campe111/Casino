@@ -2,6 +2,9 @@ import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
 
 class BlackJack extends Juego implements Apuesta {
+    jugar() {
+        throw new Error('Method not implemented.');
+    }
     mano: number[] = [];
     saldo: number;
     resultado: string = '';
