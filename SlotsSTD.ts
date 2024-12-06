@@ -58,7 +58,7 @@ export class SlotsSTD extends Juego implements Apuesta {
 
 
     // Método para generar el resultado (modularización)
-     generarResultado(cantidadDeRodillos: number = 4): string[] {
+    generarResultado(cantidadDeRodillos: number = 4): string[] {
         return Array.from({ length: cantidadDeRodillos }, () =>
             this.rodillos[Math.floor(Math.random() * this.rodillos.length)]
         );

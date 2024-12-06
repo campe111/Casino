@@ -4,12 +4,34 @@ export  abstract class Juego {
     protected tipoDeJuego: string;
     protected premio: number;
     protected estado: string; // Estado del juego
+    protected billetera: number;
+    protected billeteraActualizada: number;
 
     constructor(nombre: string, tipoDeJuego: string, premio: number) {
         this.nombre = nombre;
         this.tipoDeJuego = tipoDeJuego;
         this.premio = premio;
         this.estado = "sin iniciar";
+    }
+
+    public cargarSaldo(cantidad: number): void {
+        this.billetera += cantidad;
+        this.billeteraActualizada = this.billetera;
+        console.log(`Saldo cargado: $${cantidad}. Saldo actual en billetera: $${this.billetera}`);
+    }
+
+    public restarSaldo(cantidad: number): void {
+        if (cantidad > this.billetera) {
+            console.log('Saldo insuficiente en billetera.');
+        } else {
+            this.billetera -= cantidad;
+            this.billeteraActualizada = this.billetera;
+            console.log(`Saldo restado: $${cantidad}. Saldo actual en billetera: $${this.billetera}`);
+        }
+    }
+
+    publicmostrarSaldo(): void {
+        console.log(`Saldo actual en billetera: $${this.billetera}`);
     }
     //Metodo abstracto
     abstract realizarApuesta(monto:number):void;

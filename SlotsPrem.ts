@@ -34,7 +34,7 @@ export class SlotsPrem extends SlotsSTD implements Apuesta {
     }
 
      // Método para jugar (usando generarResultado del padre)
-     jugar(): void {
+    jugar(): void {
         if (this.apuestaActual === 0) {
             console.log("Debes realizar una apuesta antes de jugar.");
             return;
