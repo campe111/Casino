@@ -1,38 +1,14 @@
 import inquirer from 'inquirer';
 import { Usuario } from './Usuario';  // Asegúrate de que tienes esta clase importada
-import { Casino } from './Casino';
-import * as fs from 'fs';
-import { Bingo } from './Bingo';
-import { BlackJack } from './BlackJack';
-import { SlotsSTD } from './SlotsSTD';
-import { SlotsPrem } from './SlotsPrem';
+import { Casino } from './Casino';    // Y también la clase Casino
+import { Bingo } from './Bingo';      // Y también la clase Bingo
+import { BlackJack } from './BlackJack';  // Y también la clase BlackJack
+import { SlotsSTD } from './SlotsSTD';  // Y también la clase SlotsSTD
+import { SlotsPrem } from './SlotsPrem';  // Y también la clase SlotsPrem
+import * as fs from 'fs';  // Y también la librería fs
 
 // Instancia del casino
 const casino = new Casino();
-
-// Función para leer e imprimir el contenido de un archivo de texto con las instrucciones
-const imprimirInstrucciones = async () => {
-    const archivoRuta = './message.txt';  // Aquí pones la ruta de tu archivo .txt
-
-    try {
-        const data = fs.readFileSync(archivoRuta, 'utf8');
-        console.log('\n=== Instrucciones ===\n');
-        console.log(data);  // Imprime el contenido del archivo
-        console.log('\nPresiona enter para volver al menú principal...');
-
-        // Esperamos una tecla para regresar al menú principal
-        await inquirer.prompt([{
-            type: 'input',
-            name: 'continuar',
-            message: 'Presione enter para continuar...',
-            validate: (input: string) => input === '' ? true : 'Solo presione enter para continuar.'
-        }]);
-
-        menuOpciones();  // Regresamos al menú principal después de las instrucciones
-    } catch (err) {
-        console.error('Error al leer el archivo de instrucciones:', err);
-    }
-};
 
 // Pregunta para validar el nombre de usuario
 const validateNombreUsuario = async (input: string) => {
@@ -109,7 +85,7 @@ const registrarUsuario = async () => {
     casino.registrarUsuario(usuarioData.nombreUsuario, usuarioData.dni, usuarioData.edad, usuarioData.saldo);
 };
 
-// Función para acceder a un usuario
+//Funcion para acceder a un usuario
 const accederUsuario = async () => {
     const { nombreUsuario } = await inquirer.prompt([
         {
@@ -117,7 +93,7 @@ const accederUsuario = async () => {
             name: 'nombreUsuario',
             message: 'Ingrese su nombre para Acceder: ',
         }
-
+        
     ]);
 
     const usuario = casino.getUsuarios().find(u => u.getNombreUsuario() === nombreUsuario);
@@ -142,7 +118,7 @@ const submenuUsuario = async (usuario: Usuario) => {
             choices: [
                 { name: 'Acceder a usuario por nombre', value: 'accederPorNombre' },
                 { name: 'Modificar datos Usuario', value: 'modificarDatos' },
-                { name: 'Información de Usuario', value: 'infoUsuario' },
+                { name: 'Informacion de Usuario', value: 'infoUsuario' },
                 { name: 'Volver al menú principal', value: 'volver' }
             ]
         }
@@ -152,13 +128,13 @@ const submenuUsuario = async (usuario: Usuario) => {
         case 'modificarDatos':
             await modificarDatosUsuario(usuario);
             break;
-        case 'infoUsuario':
+            case 'infoUsuario':
             console.log(`Nombre de usuario: ${usuario.getNombreUsuario()} 
             DNI: ${usuario.getDni()},
             Edad: ${usuario.getEdad()},
-            Saldo: ${usuario.getSaldo()}`);
+            Saldo: ${usuario.getSaldo()}`); 
             break;
-
+                
         case 'volver':
             console.log('Volviendo al menú principal...');
             break;
@@ -219,20 +195,21 @@ const mostrarInfoUsuario = async () => {
 // Función para iniciar un juego
 const iniciarJuego = (juego: string) => {
     console.log(`Iniciando el juego: ${juego}`);
-
+    // lógica para cada juego, dependiendo de la opción
     switch (juego) {
         case 'Slots STD':
             const slots = new SlotsSTD('Slots STD', 'Juego de Casino', 100);  // Instancia del juego SlotsSTD
-            slots.jugar();  // Llama al método jugar() del juego SlotsSTD
+            slots.realizarApuesta(80);
+            slots.generarResultado();  // Llama al método jugar() del juego SlotsSTD
             break;
         case 'Slots Premium':
             const slotsPrem = new SlotsPrem('Slots Premium', 'Juego de Casino', 100, 5);  // Instancia del juego Slots Premium
-            slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
+            slotsPrem.iniciarJuego();  // Llama al método jugar() del juego Slots Premium
             break;
         case 'Blackjack':
             const blackjack = new BlackJack('Blackjack', 'Juego de Casino', 100, 5);  // Instancia del juego Blackjack
             blackjack.repartirCartas(2);  // Reparte las cartas al comenzar el juego
-            blackjack.jugar();  // Llama al método jugar() del juego Blackjack
+            blackjack.iniciarJuego(); // Llama al método jugar() del juego Blackjack
             break;
         case 'Bingo':
             const bingo = new Bingo();  // Instancia del juego Bingo
@@ -243,7 +220,6 @@ const iniciarJuego = (juego: string) => {
             break;
     }
 };
-
 
 
 // Submenú de Juegos
@@ -273,7 +249,7 @@ const menuJuegos = async () => {
             await iniciarJuego('Slots Premium');
             break;
         case 'blackjack':
-            await iniciarJuego('Blackjack');  // Inicia el juego de Blackjack
+            await iniciarJuego('Blackjack');
             break;
         case 'bingo':
             await iniciarJuego('Bingo');
@@ -291,7 +267,8 @@ const menuJuegos = async () => {
     if (opcion !== 'volver') {
         await menuJuegos();
     }
-};
+ }
+
 
 // Función para mostrar el título del casino
 const mostrarTituloCasino = () => {
@@ -303,9 +280,9 @@ const mostrarTituloCasino = () => {
   █████╔╝ ██║██╔██╗ ██║██║  ███╗       
   ██╔═██╗ ██║██║╚██╗██║██║   ██║       
   ██║  ██╗██║██║ ╚████║╚██████╔╝       
-  ╚═╝  ╚═╝╚═╝    
+  ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝        
 =========================================
-         KING ON COING CASINO
+         KING ON KOING CASINO
 =========================================
     `);
 };
@@ -313,8 +290,8 @@ const mostrarTituloCasino = () => {
     
 // Menú principal
 const menuOpciones = async () => {
-    mostrarTituloCasino();
-
+    mostrarTituloCasino()
+   
     const { opcion } = await inquirer.prompt([
         {
             type: 'list',
@@ -325,9 +302,8 @@ const menuOpciones = async () => {
                 { name: 'Acceder a un Usuario', value: 'acceder' },
                 { name: 'Mostrar Información del Usuario', value: 'mostrar' },
                 { name: 'Juegos', value: 'juegos' },
-                { name: 'Instrucciones', value: 'instrucciones' },
                 { name: 'Salir', value: 'salir' }
-            ]
+            ],
         }
         
     ]);
@@ -342,21 +318,17 @@ const menuOpciones = async () => {
         case 'mostrar':
             await mostrarInfoUsuario();
             break;
-        case 'juegos':
-            await menuJuegos();  // Llamar al submenú de juegos
-            break;
-        case 'instrucciones':
-            await imprimirInstrucciones();
-            break;
-        case 'salir':
-            console.log('Saliendo...');
-            break;
+            case 'juegos':
+                await menuJuegos();  // Llamar al submenú de juegos
+                break;
+            case 'salir':
+                console.log('Saliendo ...');
+                break;
         default:
             console.log('Opción no válida.');
             break;
     }
-
-    // Volver a mostrar el menú de opciones si no se ha salido
+    // Volver a mostrar el menú de opciones
     if (opcion !== 'salir') {
         await menuOpciones();
     }
@@ -364,4 +336,9 @@ const menuOpciones = async () => {
 
 };
 
-menuOpciones();
+ menuOpciones()
+
+// Ejecutar el menú principal
+  
+
+
