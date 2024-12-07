@@ -266,7 +266,7 @@ const iniciarJuego =  (juego: string) => {
     console.log(`Iniciando el juego: ${juego}`);
 
     switch (juego) {
-        case 'Slots STD':
+        case 'Slots  STD':
             const slotsSTD = new SlotsSTD('Slots STD', 'Juego de Casino', 100);  // Instancia del juego SlotsSTD
             slotsSTD.realizarApuesta(80);
             slotsSTD.jugar();  // Llama al método jugar() del juego SlotsSTD
