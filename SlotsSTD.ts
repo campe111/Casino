@@ -1,11 +1,12 @@
 import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
+import { SlotsPrem } from "./SlotsPrem";
 
 
 
 export class SlotsSTD extends Juego implements Apuesta {
     protected rodillos: string[]; // Símbolos del juego
-    protected apuestaActual: number =0; // Cantidad apostada en este momento
+    protected apuestaActual: number; // Cantidad apostada en este momento
     protected saldoGanado: number; // Total de dinero ganado
     protected saldoPerdido: number; // Total de dinero perdido
     private apuestaMinimaPermitida: number; // Apuesta mínima permitida
@@ -31,7 +32,7 @@ export class SlotsSTD extends Juego implements Apuesta {
             console.log("La apuesta supera el máximo permitido.");
             return;
         }
-        this.apuestaActual = monto; // Guardamos el monto apostado
+        this.apuestaActual = monto; // Guardamos el monto apostado 
         console.log(`Apuesta realizada: ${monto}`);
     }
 
@@ -96,6 +97,15 @@ export class SlotsSTD extends Juego implements Apuesta {
         );
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 
