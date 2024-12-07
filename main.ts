@@ -65,7 +65,6 @@ const validateDNI = async (input: string) => {
     return true;
 };
 
-// Función para registrar un nuevo usuario
 const registrarUsuario = async () => {
     const usuarioData = await inquirer.prompt([
         {
@@ -86,11 +85,15 @@ const registrarUsuario = async () => {
             message: 'Ingrese su edad:',
             validate: (input: string) => {
                 const edad = parseInt(input, 10);
-                if (isNaN(edad) || edad < 18) {
+                if (isNaN(edad)) {
+                    return 'Debe ingresar un número válido para la edad.';
+                }
+                if (edad < 18) {
                     return 'La edad debe ser un número válido y mayor o igual a 18 años.';
                 }
                 return true;
-            }
+            },
+            filter: (input: string) => parseInt(input, 10), // Convertimos a número
         },
         {
             type: 'input',
@@ -98,17 +101,20 @@ const registrarUsuario = async () => {
             message: 'Ingrese el saldo de su cuenta:',
             validate: (input: string) => {
                 const saldo = parseFloat(input);
-                if (isNaN(saldo) || saldo <= 0) {
-                    return 'El saldo debe ser un número mayor a 0.';
+                if (isNaN(saldo)) {
+                    return 'Debe ingresar un número válido para el saldo.';
+                }
+                if (saldo <= 0) {
+                    return 'El saldo debe ser un número mayor que 0.';
                 }
                 return true;
-            }
+            },
+            filter: (input: string) => parseFloat(input), // Convertimos a número
         }
     ]);
 
     casino.registrarUsuario(usuarioData.nombreUsuario, usuarioData.dni, usuarioData.edad, usuarioData.saldo);
 };
-
 // Función para acceder a un usuario
 const accederUsuario = async () => {
     const { nombreUsuario } = await inquirer.prompt([
@@ -175,7 +181,6 @@ const submenuUsuario = async (usuario: Usuario) => {
 };
 
 
-// Función para modificar los datos de un usuario
 const modificarDatosUsuario = async (usuario: Usuario) => {
     const { campo, nuevoValor } = await inquirer.prompt([
         {
@@ -188,22 +193,62 @@ const modificarDatosUsuario = async (usuario: Usuario) => {
             type: 'input',
             name: 'nuevoValor',
             message: 'Ingrese el nuevo valor:',
+            validate: (input: string) => {
+                // Validación de la edad
+                if (campo === 'Edad') {
+                    const edad = parseInt(input, 10);
+                    if (isNaN(edad)) {
+                        return 'Debe ingresar un número válido para la edad.';
+                    }
+                    if (edad < 18) {
+                        return 'La edad debe ser un número mayor o igual a 18 años.';
+                    }
+                    return true;
+                }
+
+                // Validación de saldo
+                if (campo === 'Saldo') {
+                    const saldo = parseFloat(input);
+                    if (isNaN(saldo)) {
+                        return 'Debe ingresar un número válido para el saldo.';
+                    }
+                    if (saldo <= 0) {
+                        return 'El saldo debe ser un número mayor que 0.';
+                    }
+                    return true;
+                }
+
+                return true;
+            },
+            filter: (input: string) => {
+                // Convertir el valor de edad o saldo según corresponda
+                if (campo === 'Edad') {
+                    return parseInt(input, 10);  // Convertir a número entero
+                } else if (campo === 'Saldo') {
+                    return parseFloat(input);  // Convertir a número decimal
+                }
+                return input;
+            }
         }
     ]);
 
+    // Validación adicional al modificar la edad, asegurándonos de que el valor ingresado es mayor a 18
     if (campo === 'Edad') {
-        usuario.setEdad(parseInt(nuevoValor, 10));
-        console.log(`Edad modificada a ${nuevoValor}`);
+        if (nuevoValor < 18) {
+            console.log('La edad debe ser un número mayor o igual a 18 años. Modificación no permitida.');
+        } else {
+            usuario.setEdad(nuevoValor);  // Modificamos la edad solo si es válida
+            console.log(`Edad modificada a ${nuevoValor}`);
+        }
     } else if (campo === 'Saldo') {
-        usuario.setSaldo(parseFloat(nuevoValor));
+        usuario.setSaldo(nuevoValor);  // Modificamos el saldo
         console.log(`Saldo modificado a ${nuevoValor}`);
     }
 
     // Volver al submenu
     await submenuUsuario(usuario);
 };
-
-
+  
 //Funcion para mostrar Info del Usuario
 const mostrarInfoUsuario = async () => {
     const { nombreUsuario } = await inquirer.prompt([
@@ -217,25 +262,30 @@ const mostrarInfoUsuario = async () => {
 };
 
 // Función para iniciar un juego
-const iniciarJuego = async (juego: string) => {
+const iniciarJuego =  (juego: string) => {
     console.log(`Iniciando el juego: ${juego}`);
 
     switch (juego) {
-        case 'Slots STD':
-            const slots = new SlotsSTD('Slots STD', 'Juego de Casino', 100);  // Instancia del juego SlotsSTD
-            await slots.jugar();  // Llama al método jugar() del juego SlotsSTD
+        case 'Slots  STD':
+            const slotsSTD = new SlotsSTD('Slots STD', 'Juego de Casino', 100);  // Instancia del juego SlotsSTD
+            slotsSTD.realizarApuesta(80);
+            slotsSTD.jugar();  // Llama al método jugar() del juego SlotsSTD
             break;
         case 'Slots Premium':
             const slotsPrem = new SlotsPrem('Slots Premium', 'Juego de Casino', 100, 5);  // Instancia del juego Slots Premium
-            await slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
+             slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
             break;
         case 'Blackjack':
             const blackjack = new BlackJack('Blackjack', 'Juego de Casino', 100, 5);  // Instancia del juego Blackjack
-            await blackjack.iniciarJuego;  // Llama al método cargarSaldo() del juego Blackjack
+             blackjack.iniciarJuego();  // Llama al método cargarSaldo() del juego Blackjack
+             blackjack.realizarApuesta(200);
+             blackjack.plantarse();
+             blackjack.calcularSumaDeCartas();
+             blackjack.finalizarJuego();
             break;
         case 'Bingo':
             const bingo = new Bingo();  // Instancia del juego Bingo
-            await bingo.jugar();  // Llama al método jugar() del juego Bingo
+             bingo.jugar();  // Llama al método jugar() del juego Bingo
             break;
         default:
             console.log('Opción no válida.');
@@ -246,7 +296,7 @@ const iniciarJuego = async (juego: string) => {
 
 // Submenú de Juegos
 const menuJuegos = async () => {
-    console.clear();
+
 
     const { opcion } = await inquirer.prompt([
         {
@@ -265,7 +315,7 @@ const menuJuegos = async () => {
 
     switch (opcion) {
         case 'slotsSTD':
-            await iniciarJuego('Slots STD');
+            iniciarJuego('Slots STD');
             break;
         case 'slotsPremium':
             await iniciarJuego('Slots Premium');

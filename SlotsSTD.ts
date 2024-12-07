@@ -97,8 +97,10 @@ export class SlotsSTD extends Juego implements Apuesta {
         );
     }
 }
-
-
+    const juego = new SlotsSTD('Slots STD', 'Juego de Casino', 100);
+    juego.iniciarJuego();
+    juego.realizarApuesta(80);
+    juego.jugar();
 
 
 
