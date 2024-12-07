@@ -222,9 +222,9 @@ const iniciarJuego =  (juego: string) => {
 
     switch (juego) {
         case 'Slots STD':
-            const slots = new SlotsSTD('Slots STD', 'Juego de Casino', 100);  // Instancia del juego SlotsSTD
-            slots.realizarApuesta(80);
-            slots.jugar();  // Llama al método jugar() del juego SlotsSTD
+            const slotsSTD = new SlotsSTD('Slots STD', 'Juego de Casino', 100);  // Instancia del juego SlotsSTD
+            slotsSTD.realizarApuesta(80);
+            slotsSTD.jugar();  // Llama al método jugar() del juego SlotsSTD
             break;
         case 'Slots Premium':
             const slotsPrem = new SlotsPrem('Slots Premium', 'Juego de Casino', 100, 5);  // Instancia del juego Slots Premium
@@ -251,7 +251,7 @@ const iniciarJuego =  (juego: string) => {
 
 // Submenú de Juegos
 const menuJuegos = async () => {
-    console.clear();
+
 
     const { opcion } = await inquirer.prompt([
         {
@@ -270,7 +270,7 @@ const menuJuegos = async () => {
 
     switch (opcion) {
         case 'slotsSTD':
-            await iniciarJuego('Slots STD');
+            iniciarJuego('Slots STD');
             break;
         case 'slotsPremium':
             await iniciarJuego('Slots Premium');
