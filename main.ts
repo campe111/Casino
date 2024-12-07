@@ -1,8 +1,8 @@
 import { Casino } from './Casino';
 import { Usuario } from './Usuario';
+import { BlackJack } from './BlackJack';
 import * as fs from 'fs';
 import { Bingo } from './Bingo';
-import { BlackJack } from './BlackJack';
 import { SlotsSTD } from './SlotsSTD';
 import { SlotsPrem } from './SlotsPrem';
 import inquirer from 'inquirer';
@@ -276,16 +276,18 @@ const iniciarJuego =  (juego: string) => {
              slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
             break;
         case 'Blackjack':
-            const blackjack = new BlackJack('Blackjack', 'Juego de Casino', 100, 5);  // Instancia del juego Blackjack
-             blackjack.iniciarJuego();  // Llama al método cargarSaldo() del juego Blackjack
-             blackjack.realizarApuesta(200);
-             blackjack.plantarse();
-             blackjack.calcularSumaDeCartas();
-             blackjack.finalizarJuego();
-            break;
+                // Crear una instancia del juego BlackJack
+                const blackJack = new BlackJack('BlackJack', 'Cartas', 20000, 1000);
+                blackJack.realizarApuesta(200);
+                blackJack.repartirCartas(2);
+                blackJack.plantarse();
+                break;
         case 'Bingo':
             const bingo = new Bingo();  // Instancia del juego Bingo
-             bingo.jugar();  // Llama al método jugar() del juego Bingo
+            bingo.realizarApuesta(5000);
+            bingo.jugar();  // Llama al método jugar() del juego Bingo
+            bingo.dineroPerdido();
+            bingo.dineroGanado();
             break;
         default:
             console.log('Opción no válida.');
