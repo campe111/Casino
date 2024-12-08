@@ -292,11 +292,13 @@ const iniciarJuego = (juego: string) => {
             break;
         case 'Bingo':
             const bingo = new Bingo();  // Instancia del juego Bingo
+            const saldoBingo = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Bingo? ');
+            bingo.cargarSaldo(saldoBingo);
             const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
             bingo.realizarApuesta(apuestaBingo);
-            bingo.jugar();  // Llama al método jugar() del juego Bingo
-            bingo.dineroPerdido();
-            bingo.dineroGanado();
+            bingo.jugar();
+             // Llama al método jugar() del juego Bingo
+            bingo.bingoFinal();
             break;
         default:
             console.log('Opción no válida.');
