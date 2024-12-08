@@ -271,16 +271,14 @@ const iniciarJuego = (juego: string) => {
         case 'Slots  STD':
             const slotsSTD = new SlotsSTD();  // Instancia del juego SlotsSTD
             const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
-            slotsSTD.realizarApuesta(apuestaSlotsSTD);
-            slotsSTD.jugar();
+            
             break;
         case 'Slots Premium':
             const slotsPrem = new SlotsPrem();  // Instancia del juego Slots Premium
             const apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
-            slotsPrem.realizarApuesta(apuestaSlotsPremium);
-            slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
+         
             break;
-        case 'Blackjack':
+        case 'Blackjack': 
             // Crear una instancia del juego BlackJack
             const blackJack = new BlackJack();  // Instancia del juego BlackJack
             const saldoBlackJack = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Blackjack? ');
@@ -292,11 +290,13 @@ const iniciarJuego = (juego: string) => {
             break;
         case 'Bingo':
             const bingo = new Bingo();  // Instancia del juego Bingo
+            const saldoBingo = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Bingo? ');
+            bingo.cargarSaldo(saldoBingo);
             const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
             bingo.realizarApuesta(apuestaBingo);
-            bingo.jugar();  // Llama al método jugar() del juego Bingo
-            bingo.dineroPerdido();
-            bingo.dineroGanado();
+            bingo.jugar();
+             // Llama al método jugar() del juego Bingo
+            bingo.bingoFinal();
             break;
         default:
             console.log('Opción no válida.');
