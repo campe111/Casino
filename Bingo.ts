@@ -61,7 +61,7 @@ class Bingo extends Juego implements Apuesta {
         console.table(cartonMarcado.join(' '));
     }
 
-    // Función principal del juego
+    // Función principal  del juego
     public jugar(): void {
         if (this.apuestaActual <= 0) {
             console.log("Carga saldo y realiza una apuesta antes de jugar.");

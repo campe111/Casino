@@ -11,23 +11,32 @@ class BlackJack extends Juego implements Apuesta {
     juegoEnCurso: boolean = false;
 
     constructor() {
-        super('BlackJack', 'Cartas', 100);
+        super('BlackJack', 'Cartas', 1000);
         this.saldo = 0; // Inicializar saldo a 0
     }
 
     repartirCartas(numeroDeCartas: number = 2): void {
+        if (this.apuestaActual <= 0) {
+            console.log("Primero debes realizar una apuesta antes de repartir las cartas.");
+            return; // Si no hay apuesta, no se puede repartir las cartas
+        }
+
         this.mano = [];
         for (let i = 0; i < numeroDeCartas; i++) {
             this.mano.push(this.generarCartaAleatoria());
         }
         this.juegoEnCurso = true;
+        console.log("Cartas repartidas.");
     }
 
     plantarse(): void {
-        if (this.juegoEnCurso) {
-            this.calcularSumaDeCartas(); // Calcula la suma al plantarse
-            this.actualizarSaldo(); // Actualiza el saldo al finalizar el juego
+        if (!this.juegoEnCurso) {
+            console.log("El juego no está en curso.");
+            return; // Si no hay juego en curso, no se puede plantarse
         }
+
+        this.calcularSumaDeCartas(); // Calcula la suma al plantarse
+        this.actualizarSaldo(); // Actualiza el saldo al finalizar el juego
     }
 
     calcularSumaDeCartas(): void {
@@ -59,7 +68,6 @@ class BlackJack extends Juego implements Apuesta {
             this.resultado = `La suma de tus cartas es ${suma}. Ganaste $${this.apuestaActual * this.premio}.`;
         }
         console.log(this.resultado); // Mostrar el resultado
-
     }
 
     // Método para generar una carta aleatoria
@@ -72,12 +80,12 @@ class BlackJack extends Juego implements Apuesta {
     realizarApuesta(monto: number): void {
         if (monto < this.apuestaMinima()) {
             console.log("El monto apostado es menor que la apuesta mínima.");
-            return;
+            return; // Detiene la ejecución si la apuesta es menor que la mínima
         } else if (monto > this.saldo) {
             console.log("Saldo insuficiente para realizar la apuesta.");
-            return;
+            return; // Detiene la ejecución si la apuesta es mayor que el saldo
         } else {
-            this.saldo -= monto;
+            this.saldo -= monto; // Restar del saldo
             this.apuestaActual = monto; // Registrar la apuesta actual
             this.resultado = ''; // Reiniciar resultado al realizar una nueva apuesta
             console.log(`Apuesta realizada con éxito. Monto apostado: $${monto}`);
@@ -106,8 +114,8 @@ class BlackJack extends Juego implements Apuesta {
             console.log(`Saldo actualizado: $${this.saldo}`);
         } else if (this.resultado.includes('Perdiste')) {
             // Si el jugador perdió, se debe restar solo la apuesta actual del saldo
-            this.saldo - this.perdidas; // Restar solo lo apostado
-            console.log(`Perdiste. Has perdido $${this.perdidas}.`);
+            this.saldo -= this.apuestaActual; // Restar solo lo apostado
+            console.log(`Perdiste. Has perdido $${this.apuestaActual}.`);
             console.log(`Saldo actualizado: $${this.saldo}`);
         }
     
