@@ -10,9 +10,9 @@ class BlackJack extends Juego implements Apuesta {
     apuestaActual: number = 0;
     juegoEnCurso: boolean = false;
 
-    constructor(nombre: string, tipoDeJuego: string, premio: number, saldo: number) {
-        super(nombre, tipoDeJuego, premio);
-        this.saldo = saldo;
+    constructor() {
+        super('BlackJack', 'Cartas', 100);
+        this.saldo = 0; // Inicializar saldo a 0
     }
 
     repartirCartas(numeroDeCartas: number = 2): void {
@@ -71,14 +71,16 @@ class BlackJack extends Juego implements Apuesta {
     // Métodos de la interfaz
     realizarApuesta(monto: number): void {
         if (monto < this.apuestaMinima()) {
+            console.log("El monto apostado es menor que la apuesta mínima.");
+            return;
+        } else if (monto > this.saldo) {
             console.log("Saldo insuficiente para realizar la apuesta.");
-        } else if (monto <= this.saldo) {
+            return;
+        } else {
             this.saldo -= monto;
             this.apuestaActual = monto; // Registrar la apuesta actual
             this.resultado = ''; // Reiniciar resultado al realizar una nueva apuesta
             console.log(`Apuesta realizada con éxito. Monto apostado: $${monto}`);
-        } else {
-            console.log("Saldo insuficiente.");
         }
     }
 
@@ -94,40 +96,31 @@ class BlackJack extends Juego implements Apuesta {
         return 100; // Ejemplo: Monto mínimo de apuesta es 100
     }
 
-    // Nuevo método para actualizar el saldo al finalizar el juego
     private actualizarSaldo(): void {
         if (this.resultado.includes('Ganaste')) {
+            // Calculamos las ganancias (ganancia neta es la apuesta * el premio)
             const ganancias = this.apuestaActual * this.premio;
-            this.saldo += ganancias; // Sumar ganancias al saldo actual
+            // Se suman tanto las ganancias como la apuesta original que se ha devuelto
+            this.saldo += ganancias + this.apuestaActual;
+            console.log(`¡Ganaste! Has obtenido $${ganancias} de ganancia neta.`);
             console.log(`Saldo actualizado: $${this.saldo}`);
         } else if (this.resultado.includes('Perdiste')) {
-            this.saldo -= this.apuestaActual; // Restar la apuesta al saldo actual
+            // Si el jugador perdió, se debe restar solo la apuesta actual del saldo
+            this.saldo - this.perdidas; // Restar solo lo apostado
+            console.log(`Perdiste. Has perdido $${this.perdidas}.`);
             console.log(`Saldo actualizado: $${this.saldo}`);
         }
-        this.juegoEnCurso = false; // Finalizar el juego
+    
+        // Finalizar el juego
+        this.juegoEnCurso = false;
         this.apuestaActual = 0; // Reiniciar la apuesta actual
+    }
+
+    // Método para cargar saldo
+    cargarSaldo(monto: number): void {
+        this.saldo += monto;
+        console.log(`Saldo cargado: $${monto}. Saldo actual en billetera: $${this.saldo}`);
     }
 }
 
 export { BlackJack };
-
-
-// // Crear una instancia del juego BlackJack
-// const juegoBlackJack = new BlackJack('BlackJack', 'Cartas', 2, 1000);
-
-// // Mostrar el saldo inicial
-// juegoBlackJack.mostrarSaldo();
-
-// // Realizar una apuesta
-// juegoBlackJack.realizarApuesta(200);
-
-// // Repartir cartas al iniciar el juego
-// juegoBlackJack.repartirCartas();
-
-// // Mostrar la mano del jugador
-// console.log(`Mano del jugador: ${juegoBlackJack.mano}`);
-
-// // El jugador decide plantarse
-// juegoBlackJack.plantarse();
-
-
