@@ -268,15 +268,26 @@ const iniciarJuego = (juego: string) => {
     console.log(`Iniciando el juego: ${juego}`);
 
     switch (juego) {
-        case 'Slots  STD':
-            const slotsSTD = new SlotsSTD();  // Instancia del juego SlotsSTD
-            const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
-            
+        case 'Slots STD':
+            const slotsSTD = new SlotsSTD();
+            const saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
+            slotsSTD.cargarSaldo(saldoSlotsSTD);
+            console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos")
+            const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ')
+            slotsSTD.realizarApuesta(apuestaSlotsSTD);
+            slotsSTD.jugar();
+            slotsSTD.actualizarSaldo();
+        
             break;
         case 'Slots Premium':
             const slotsPrem = new SlotsPrem();  // Instancia del juego Slots Premium
+            const saldoSlotsPremium = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots Premium? ');
+            slotsPrem.cargarSaldo(saldoSlotsPremium);
+            console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos");
             const apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
-         
+            slotsPrem.realizarApuesta(apuestaSlotsPremium);
+            slotsPrem.jugar();
+            slotsPrem.actualizarSaldo();
             break;
         case 'Blackjack': 
             // Crear una instancia del juego BlackJack

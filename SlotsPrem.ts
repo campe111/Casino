@@ -77,8 +77,8 @@ export class SlotsPrem extends SlotsSTD implements Apuesta {
         }
 
         // Actualizar saldo y mostrar resultados finales
-        this.saldo += this.saldoGanado;
-        this.saldo -= this.saldoPerdido;
+        this.saldo + this.saldoGanado;
+        this.saldo - this.saldoPerdido;
         
 
         // Reiniciar apuestas y ganancias
@@ -94,14 +94,3 @@ export class SlotsPrem extends SlotsSTD implements Apuesta {
         );
     }
 }
-
-
-
-// Crear una instancia del juego Slots Premium
-const juego1 = new SlotsPrem();
-juego1.cargarSaldo(500000);
-juego1.realizarApuesta(1000);
-juego1.actualizarSaldo();  // Mostrar el saldo después de jugar
-juego1.jugar();  // Llama al método jugar() del juego Slots Premium
-
-
