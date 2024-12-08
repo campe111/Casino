@@ -1,11 +1,12 @@
+import * as readlineSync from 'readline-sync'; 
+import { SlotsSTD } from './SlotsSTD'; 
+import { SlotsPrem } from './SlotsPrem'; 
+import { BlackJack } from './BlackJack'; 
+import { Bingo } from './Bingo';
 import { Casino } from './Casino';
 import { Usuario } from './Usuario';
-import { BlackJack } from './BlackJack';
-import * as fs from 'fs';
-import { Bingo } from './Bingo';
-import { SlotsSTD } from './SlotsSTD';
-import { SlotsPrem } from './SlotsPrem';
 import inquirer from 'inquirer';
+import * as fs from 'fs';
 
 // Instancia del casino
 const casino = new Casino();
@@ -248,7 +249,7 @@ const modificarDatosUsuario = async (usuario: Usuario) => {
     // Volver al submenu
     await submenuUsuario(usuario);
 };
-  
+
 //Funcion para mostrar Info del Usuario
 const mostrarInfoUsuario = async () => {
     const { nombreUsuario } = await inquirer.prompt([
@@ -262,29 +263,37 @@ const mostrarInfoUsuario = async () => {
 };
 
 // Función para iniciar un juego
-const iniciarJuego =  (juego: string) => {
+
+const iniciarJuego = (juego: string) => {
     console.log(`Iniciando el juego: ${juego}`);
 
     switch (juego) {
         case 'Slots  STD':
-            const slotsSTD = new SlotsSTD('Slots STD', 'Juego de Casino', 100);  // Instancia del juego SlotsSTD
-            slotsSTD.realizarApuesta(80);
-            slotsSTD.jugar();  // Llama al método jugar() del juego SlotsSTD
+            const slotsSTD = new SlotsSTD();  // Instancia del juego SlotsSTD
+            const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
+            slotsSTD.realizarApuesta(apuestaSlotsSTD);
+            slotsSTD.jugar();
             break;
         case 'Slots Premium':
-            const slotsPrem = new SlotsPrem('Slots Premium', 'Juego de Casino', 100, 5);  // Instancia del juego Slots Premium
-             slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
+            const slotsPrem = new SlotsPrem();  // Instancia del juego Slots Premium
+            const apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
+            slotsPrem.realizarApuesta(apuestaSlotsPremium);
+            slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
             break;
         case 'Blackjack':
-                // Crear una instancia del juego BlackJack
-                const blackJack = new BlackJack('BlackJack', 'Cartas', 20000, 1000);
-                blackJack.realizarApuesta(200);
-                blackJack.repartirCartas(2);
-                blackJack.plantarse();
-                break;
+            // Crear una instancia del juego BlackJack
+            const blackJack = new BlackJack();  // Instancia del juego BlackJack
+            const saldoBlackJack = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Blackjack? ');
+            blackJack.cargarSaldo(saldoBlackJack);
+            const apuestaBlackJack = readlineSync.questionInt('¿Cuánto deseas apostar en Blackjack? ');
+            blackJack.realizarApuesta(apuestaBlackJack);
+            blackJack.repartirCartas(2);
+            blackJack.plantarse();
+            break;
         case 'Bingo':
             const bingo = new Bingo();  // Instancia del juego Bingo
-            bingo.realizarApuesta(5000);
+            const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
+            bingo.realizarApuesta(apuestaBingo);
             bingo.jugar();  // Llama al método jugar() del juego Bingo
             bingo.dineroPerdido();
             bingo.dineroGanado();
@@ -296,10 +305,10 @@ const iniciarJuego =  (juego: string) => {
 };
 
 
+
+
 // Submenú de Juegos
 const menuJuegos = async () => {
-
-
     const { opcion } = await inquirer.prompt([
         {
             type: 'list',
@@ -320,13 +329,13 @@ const menuJuegos = async () => {
             iniciarJuego('Slots STD');
             break;
         case 'slotsPremium':
-            await iniciarJuego('Slots Premium');
+            iniciarJuego('Slots Premium');
             break;
         case 'blackjack':
-            await iniciarJuego('Blackjack');
+            iniciarJuego('Blackjack');
             break;
         case 'bingo':
-            await iniciarJuego('Bingo');
+            iniciarJuego('Bingo');
             break;
         case 'volver':
             console.log('Volviendo al menú principal...');
@@ -347,15 +356,15 @@ const menuJuegos = async () => {
 const mostrarTituloCasino = () => {
     console.clear(); // Limpia la consola para un diseño limpio
     console.log(`
-========================================
-  ██╗  ██╗██╗███╗   ██╗ ██████╗        
-  ██║ ██╔╝██║████╗  ██║██╔════╝        
-  █████╔╝ ██║██╔██╗ ██║██║  ███╗       
-  ██╔═██╗ ██║██║╚██╗██║██║   ██║       
-  ██║  ██╗██║██║ ╚████║╚██████╔╝       
-  ╚═╝  ╚═╝╚═╝    
+======================================== 
+    ██╗  ██╗██╗███╗   ██╗ ██████╗        
+    ██║ ██╔╝██║████╗  ██║██╔════╝        
+    █████╔╝ ██║██╔██╗ ██║██║  ███╗       
+    ██╔═██╗ ██║██║╚██╗██║██║   ██║       
+    ██║  ██╗██║██║ ╚████║╚██████╔╝       
+    ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝  
 =========================================
-         KING ON COING CASINO
+        KING OF COING CASINO
 =========================================
     `);
 };

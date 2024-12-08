@@ -1,8 +1,5 @@
 import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
-import { SlotsPrem } from "./SlotsPrem";
-
-
 
 export class SlotsSTD extends Juego implements Apuesta {
     protected rodillos: string[]; // Símbolos del juego
@@ -12,14 +9,14 @@ export class SlotsSTD extends Juego implements Apuesta {
     private apuestaMinimaPermitida: number; // Apuesta mínima permitida
     private apuestaMaximaPermitida: number; // Apuesta máxima permitida
 
-    constructor(nombre: string, tipoDeJuego: string, premio: number) {
-        super(nombre, tipoDeJuego, premio); // Llamamos al constructor de la clase padre
-        this.rodillos = ["A", "B", "C", "D", "E"]; // Posibles símbolos
+    constructor() {
+        super('Slots STD', 'Juego de Casino', 10000); // Ajusté el premio a 100 para simplificación
+        this.rodillos = ["🍒", "🍑", "🍐", "🍏", "🍎"]; // Posibles símbolos
         this.apuestaActual = 0; // Al principio no hay apuesta
         this.saldoGanado = 0; // No se ha ganado nada todavía
         this.saldoPerdido = 0; // No se ha perdido nada todavía
-        this.apuestaMinimaPermitida = 20;  //apuesta mínima de 20
-        this.apuestaMaximaPermitida = 500; // apuesta máxima de 500
+        this.apuestaMinimaPermitida = 20; // Apuesta mínima de 20
+        this.apuestaMaximaPermitida = 1000; // Apuesta máxima de 500
     }
 
     // Método para realizar una apuesta
@@ -32,13 +29,13 @@ export class SlotsSTD extends Juego implements Apuesta {
             console.log("La apuesta supera el máximo permitido.");
             return;
         }
-        this.apuestaActual = monto; // Guardamos el monto apostado 
+        this.apuestaActual = monto; // Guardamos el monto apostado
         console.log(`Apuesta realizada: ${monto}`);
     }
 
     // Método para obtener el dinero ganado
     dineroGanado(): number {
-        return this.saldoGanado += this.apuestaActual; // Devolvemos el saldo ganado
+        return this.saldoGanado; // Devolvemos el saldo ganado
     }
 
     // Método para obtener el dinero perdido
@@ -56,63 +53,41 @@ export class SlotsSTD extends Juego implements Apuesta {
         return this.apuestaMaximaPermitida;
     }
 
-
-
-    // Método para generar el resultado (modularización)
+    // Método para generar el resultado
     generarResultado(cantidadDeRodillos: number = 4): string[] {
         return Array.from({ length: cantidadDeRodillos }, () =>
             this.rodillos[Math.floor(Math.random() * this.rodillos.length)]
         );
     }
 
-
-    // Método para jugar (usando generarResultado)
+    // Método para jugar
     jugar(): void {
         if (this.apuestaActual === 0) {
             console.log("Debes realizar una apuesta antes de jugar.");
             return;
         }
 
-        // Generamos el resultado con 6 rodillos
-        const resultado = this.generarResultado(6);
+        // Generamos el resultado
+        const resultado = this.generarResultado(4);
+        console.log("Resultado:", resultado.join(""));
 
-        console.log("Resultado:", resultado);
-
-        // Si los 6 símbolos son iguales
+        // Lógica de resultados
         if (resultado.every((simbolo) => simbolo === resultado[0])) {
-            console.log("¡Jackpot! Los 6 símbolos son iguales.");
+            console.log("¡Jackpot! Los símbolos son iguales.");
             this.saldoGanado += this.apuestaActual * 10; // Gran premio con multiplicador x10
-        } else if (new Set(resultado).size === 3) {
-            console.log("¡Ganaste! Tres pares iguales.");
-            this.saldoGanado += this.apuestaActual * 3; // Premio por 3 pares iguales
+        } else if (new Set(resultado).size === 2) {
+            console.log("¡Ganaste! Dos pares iguales.");
+            this.saldoGanado += this.apuestaActual * 3; // Premio por dos pares iguales
         } else {
             console.log("Perdiste.");
             this.saldoPerdido += this.apuestaActual; // Pierdes lo que apostaste
         }
     }
 
+    // Método para mostrar las instrucciones del juego
     instruccionJuego(): void {
         console.log(
             `Instrucciones del juego "${this.nombre}": Este es un juego de tipo "${this.tipoDeJuego}". Sigue las reglas si deseas ganar el premio de ${this.premio} puntos.`
         );
     }
 }
-    const juego = new SlotsSTD('Slots STD', 'Juego de Casino', 100);
-    juego.iniciarJuego();
-    juego.realizarApuesta(80);
-    juego.jugar();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
