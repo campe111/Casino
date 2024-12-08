@@ -287,7 +287,7 @@ const iniciarJuego = (juego: string) => {
             blackJack.cargarSaldo(saldoBlackJack);
             const apuestaBlackJack = readlineSync.questionInt('¿Cuánto deseas apostar en Blackjack? ');
             blackJack.realizarApuesta(apuestaBlackJack);
-            blackJack.repartirCartas(2);
+            blackJack.repartirCartas(3);
             blackJack.plantarse();
             break;
         case 'Bingo':
@@ -378,7 +378,7 @@ const menuOpciones = async () => {
         {
             type: 'list',
             name: 'opcion',
-            message: 'Bienvenido al Casino KING ON KOING. \n Elija una opción:',
+            message: 'Bienvenido al Casino KING OF COING. \n Elija una opción:',
             choices: [
                 { name: 'Registrar Nuevo Usuario', value: 'registrar' },
                 { name: 'Acceder a un Usuario', value: 'acceder' },
