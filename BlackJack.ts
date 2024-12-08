@@ -11,7 +11,7 @@ class BlackJack extends Juego implements Apuesta {
     juegoEnCurso: boolean = false;
 
     constructor() {
-        super('BlackJack', 'Cartas', 1000);
+        super('BlackJack', 'Cartas', 200);
         this.saldo = 0; // Inicializar saldo a 0
     }
 
@@ -85,7 +85,7 @@ class BlackJack extends Juego implements Apuesta {
             console.log("Saldo insuficiente para realizar la apuesta.");
             return; // Detiene la ejecución si la apuesta es mayor que el saldo
         } else {
-            this.saldo -= monto; // Restar del saldo
+            this.saldo - monto; // Restar del saldo
             this.apuestaActual = monto; // Registrar la apuesta actual
             this.resultado = ''; // Reiniciar resultado al realizar una nueva apuesta
             console.log(`Apuesta realizada con éxito. Monto apostado: $${monto}`);
