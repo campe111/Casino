@@ -12,14 +12,14 @@ export class SlotsSTD extends Juego implements Apuesta {
     private apuestaMaximaPermitida: number; // Apuesta máxima permitida
 
     constructor() {
-        super('Slots STD', 'Juego de Casino', 10000); // Ajusté el premio a 100 para simplificación
+        super('Slots STD', 'Juego de Casino', 100); // Ajusté el premio a 100 para simplificación
         this.rodillos = ["🍒", "🍑", "🍐", "🍏"]; // Posibles símbolos del juego
         this.apuestaActual = 0; // Al principio no hay apuesta
         this.saldoGanado = 0; // No se ha ganado nada todavía
         this.saldoPerdido = 0; // No se ha perdido nada todavía
         this.saldo = 0; // El saldo inicial es 0
         this.apuestaMinimaPermitida = 20; // Apuesta mínima de 20
-        this.apuestaMaximaPermitida = 1000; // Apuesta máxima de 1000
+        this.apuestaMaximaPermitida = 500; // Apuesta máxima de 1000
     }
 
     // Método para cargar saldo
@@ -114,8 +114,8 @@ export class SlotsSTD extends Juego implements Apuesta {
         }
 
         // Actualizar saldo y mostrar resultados finales
-        this.saldo += this.saldoGanado;
-        this.saldo -= this.saldoPerdido;
+        this.saldo + this.saldoGanado;
+        this.saldo - this.saldoPerdido;
 
         // Reiniciar apuestas y ganancias
         this.apuestaActual = 0;
@@ -135,9 +135,3 @@ export class SlotsSTD extends Juego implements Apuesta {
         );
     }
 }
-
-    const juego2 = new SlotsSTD();
-    juego2.cargarSaldo(500000);
-    juego2.realizarApuesta(1000);
-    juego2.actualizarSaldo();  // Mostrar el saldo después de jugar
-    juego2.jugar();  // Llama al método jugar() del juego Slots Premium
