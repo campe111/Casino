@@ -17,15 +17,15 @@ export class SlotsSTD extends Juego implements Apuesta {
 
 
     constructor(billetera: Billetera) {
-        super("Slots STD", "Juego de Casino", 50, billetera); // Ajusté el premio a 100 para simplificación
+        super("Slots STD", "Juego de Casino", 10, billetera); // Ajusté el premio a 100 para simplificación
         this.rodillos = ["🍒", "🍑", "🍐", "🍏"]; // Posibles símbolos del juego
         this.premioSlost = 10;
         this.premioBasico = 2;
         this.apuestaActual = 0; // Al principio no hay apuesta
         this.saldoGanado = 0; // No se ha ganado nada todavía
         this.saldoPerdido = 0; // No se ha perdido nada todavía
-        this.apuestaMinimaPermitida = 20; // Apuesta mínima de 20
-        this.apuestaMaximaPermitida = 500; // Apuesta máxima de 500
+        this.apuestaMinimaPermitida = 20; // Apuesta mínima de 500
+        this.apuestaMaximaPermitida = 500; // Apuesta máxima de 2000
     }
 
     // Método para cargar saldo
