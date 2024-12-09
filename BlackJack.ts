@@ -12,7 +12,7 @@ class BlackJack extends Juego implements Apuesta {
     saldo: number = 0;
 
     constructor(billetera: Billetera) {
-        super('BlackJack', 'Cartas', 200, billetera);
+        super('BlackJack', 'Cartas', 50, billetera);
 
     }
 
@@ -83,18 +83,7 @@ class BlackJack extends Juego implements Apuesta {
         }
     }
 
-    dineroGanado(): number {
-        return this.ganancias;
-    }
-
-    dineroPerdido(): number {
-        return this.perdidas;
-    }
-
-    apuestaMinima(): number {
-        return 100; // Ejemplo: Monto mínimo de apuesta es 100
-    }
-
+    
     private actualizarSaldo(): void {
         if (this.resultado.includes('Ganaste')) {
             const ganancias = this.apuestaActual * this.premio;
@@ -105,6 +94,17 @@ class BlackJack extends Juego implements Apuesta {
         }
         this.juegoEnCurso = false; // Finalizar el juego
         this.apuestaActual = 0; // Reiniciar la apuesta actual
+    }
+    dineroGanado(): number {
+        return this.ganancias;
+    }
+    
+    dineroPerdido(): number {
+        return this.perdidas;
+    }
+    
+    apuestaMinima(): number {
+        return 100; // Ejemplo: Monto mínimo de apuesta es 100
     }
 }
 

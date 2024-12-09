@@ -477,14 +477,12 @@ var mostrarInfoUsuario = function () { return __awaiter(void 0, void 0, void 0, 
 // Función para iniciar un juego
 var billetera = new Billetera_1.Billetera(); // Instancia de la billetera
 var iniciarJuego = function (juego) { return __awaiter(void 0, void 0, void 0, function () {
-    var slotsSTD, saldoSlotsSTD, jugarSlotsSTD, apuestaSlotsSTD, slotsPrem, saldoSlotsPremium, jugarSlotsPremium, apuestaSlotsPremium, blackJack, saldoBlackJack, jugarBlackJack, apuestaBlackJack, bingo, saldoBingo, jugarBingo, apuestaBingo;
+    var slotsSTD, jugarSlotsSTD, apuestaSlotsSTD, slotsPrem, jugarSlotsPremium, apuestaSlotsPremium, blackJack, jugarBlackJack, apuestaBlackJack, bingo, jugarBingo, apuestaBingo;
     return __generator(this, function (_a) {
         console.log("Iniciando el juego: ".concat(juego));
         switch (juego) {
             case 'Slots STD':
                 slotsSTD = new SlotsSTD_1.SlotsSTD(billetera);
-                saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
-                slotsSTD.cargarSaldo(saldoSlotsSTD);
                 jugarSlotsSTD = true;
                 while (jugarSlotsSTD) {
                     console.log("La apuesta mínima es de 20 pesos y la máxima es de 500 pesos");
@@ -497,14 +495,12 @@ var iniciarJuego = function (juego) { return __awaiter(void 0, void 0, void 0, f
                         jugarSlotsSTD = false;
                     }
                     else {
-                        jugarSlotsSTD = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                        jugarSlotsSTD = readlineSync.keyInYNStrict("¿Quieres volver a jugar y realizar otra apuesta? ");
                     }
                 }
                 break;
             case 'Slots Premium':
                 slotsPrem = new SlotsPrem_1.SlotsPrem(billetera);
-                saldoSlotsPremium = readlineSync.questionInt("¿Cuánto saldo deseas cargar en Slots Premium? ");
-                slotsPrem.cargarSaldo(saldoSlotsPremium);
                 jugarSlotsPremium = true;
                 while (jugarSlotsPremium) {
                     console.log("La apuesta minima es de 20 pesos y la maxima es de 500 pesos");
@@ -523,8 +519,6 @@ var iniciarJuego = function (juego) { return __awaiter(void 0, void 0, void 0, f
                 break;
             case 'Blackjack':
                 blackJack = new BlackJack_1.BlackJack(billetera);
-                saldoBlackJack = readlineSync.questionInt("¿Cuanto saldo deseas cargar en Blackjack? ");
-                blackJack.cargarSaldo(saldoBlackJack);
                 jugarBlackJack = true;
                 while (jugarBlackJack) {
                     apuestaBlackJack = readlineSync.questionInt("¿Cuanto deseas apostar en Blackjack? ");
@@ -542,8 +536,6 @@ var iniciarJuego = function (juego) { return __awaiter(void 0, void 0, void 0, f
                 break;
             case 'Bingo':
                 bingo = new Bingo_1.Bingo(billetera);
-                saldoBingo = readlineSync.questionInt("¿Cuánto saldo deseas cargar en Bingo? ");
-                bingo.cargarSaldo(saldoBingo);
                 jugarBingo = true;
                 while (jugarBingo) {
                     apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');

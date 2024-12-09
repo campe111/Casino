@@ -20,7 +20,7 @@ var Juego_1 = require("./Juego");
 var BlackJack = /** @class */ (function (_super) {
     __extends(BlackJack, _super);
     function BlackJack(billetera) {
-        var _this = _super.call(this, 'BlackJack', 'Cartas', 200, billetera) || this;
+        var _this = _super.call(this, 'BlackJack', 'Cartas', 50, billetera) || this;
         _this.mano = [];
         _this.resultado = '';
         _this.ganancias = 0;
@@ -96,15 +96,6 @@ var BlackJack = /** @class */ (function (_super) {
             console.log("Apuesta realizada con \u00E9xito. Monto apostado: $".concat(monto));
         }
     };
-    BlackJack.prototype.dineroGanado = function () {
-        return this.ganancias;
-    };
-    BlackJack.prototype.dineroPerdido = function () {
-        return this.perdidas;
-    };
-    BlackJack.prototype.apuestaMinima = function () {
-        return 100; // Ejemplo: Monto mínimo de apuesta es 100
-    };
     BlackJack.prototype.actualizarSaldo = function () {
         if (this.resultado.includes('Ganaste')) {
             var ganancias = this.apuestaActual * this.premio;
@@ -116,6 +107,15 @@ var BlackJack = /** @class */ (function (_super) {
         }
         this.juegoEnCurso = false; // Finalizar el juego
         this.apuestaActual = 0; // Reiniciar la apuesta actual
+    };
+    BlackJack.prototype.dineroGanado = function () {
+        return this.ganancias;
+    };
+    BlackJack.prototype.dineroPerdido = function () {
+        return this.perdidas;
+    };
+    BlackJack.prototype.apuestaMinima = function () {
+        return 100; // Ejemplo: Monto mínimo de apuesta es 100
     };
     return BlackJack;
 }(Juego_1.Juego));
