@@ -20,7 +20,7 @@ var Juego_1 = require("./Juego");
 var Bingo = /** @class */ (function (_super) {
     __extends(Bingo, _super);
     function Bingo(billetera) {
-        var _this = _super.call(this, "Bingo", "Juego de Casino", 1000, billetera) || this;
+        var _this = _super.call(this, "Bingo", "Juego de Casino", 50, billetera) || this;
         _this.carton = [];
         _this.resultado = '';
         _this.bolasLlamadas = [];
@@ -28,7 +28,6 @@ var Bingo = /** @class */ (function (_super) {
         _this.apuestaActual = 0;
         _this.ganancias = 0;
         _this.perdidas = 0;
-        _this.premio = 1000; // Premio fijo 
         _this.juegoEnCurso = false;
         _this.carton = _this.generarCarton();
         _this.bolasLlamadas = _this.generarBolas();
@@ -116,15 +115,19 @@ var Bingo = /** @class */ (function (_super) {
     // Métodos de la interfaz Apuesta
     Bingo.prototype.realizarApuesta = function (monto) {
         if (monto < this.apuestaMinima()) {
-            console.log("La apuesta m\u00EDnima es $".concat(this.apuestaMinima(), " y no has alcanzado ese monto."));
+            console.log("El monto apostado es menor que la apuesta mínima.");
             return;
         }
-        if (monto > this.saldo) {
-            console.log("No tienes suficiente saldo. Tu saldo actual es $".concat(this.saldo, ", pero intentas apostar $").concat(monto, "."));
-            return; // No permitir la apuesta si el monto es mayor que el saldo
+        else if (monto > this.billetera.obtenerSaldo()) {
+            console.log("Saldo insuficiente para realizar la apuesta.");
+            return;
         }
-        this.apuestaActual = monto;
-        console.log("Apuesta de $".concat(monto, " realizada en el juego ").concat(this.nombre, "."));
+        else {
+            this.billetera.restarSaldo(monto);
+            this.apuestaActual = monto; // Registrar la apuesta actual
+            this.resultado = ''; // Reiniciar resultado al realizar una nueva apuesta
+            console.log("Apuesta realizada con \u00E9xito. Monto apostado: $".concat(monto));
+        }
     };
     // Método para actualizar el saldo después de cada jugada
     Bingo.prototype.actualizarSaldo = function () {
@@ -139,7 +142,7 @@ var Bingo = /** @class */ (function (_super) {
             this.saldo -= this.apuestaActual;
             console.log("Perdiste. Has perdido $".concat(this.apuestaActual, "."));
         }
-        console.log("Saldo actualizado: $".concat(this.saldo));
+        console.log("Saldo actualizado: $".concat(this.billetera.obtenerSaldo() + this.saldo));
         this.juegoEnCurso = false; // Finalizar el juego
         this.apuestaActual = 0; // Reiniciar la apuesta actual
     };

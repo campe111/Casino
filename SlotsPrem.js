@@ -22,26 +22,18 @@ var SlotsPrem = /** @class */ (function (_super) {
     function SlotsPrem(billetera) {
         var _this = _super.call(this, billetera) || this;
         _this.rodillos = ["🍒", "🍑", "🍐", "🍏", "🍎", "🍋", "🍇"]; // Símbolos adicionales
-        _this.multiplicador = 5; // Multiplicador base
-        _this.saldoGanado = 0;
-        _this.saldoPerdido = 0;
-        _this.apuestaActual = 0;
+        _this.multiplicador = 2; // Multiplicador base
+        _this.multiplicadorMasSimbolos = 8; // Multiplicador para más de 4 símbolos iguales
+        _this.multiplicadorBonus = 10; // Multiplicador Bonus
         _this.bonus = 2000; // Bono fijo por Jackpot
-        _this.multiplicadoresExtras = {
-            "tresSimbolosIguales": 10, // Tres símbolos iguales
-            "dosSimbolosIguales": 3, // Dos símbolos iguales
-            "paresIguales": 2 // Pareja de símbolos
-        };
         return _this;
     }
-    // Métodos para obtener el multiplicador y el bonus
     SlotsPrem.prototype.getMultiplicador = function () {
         return this.multiplicador;
     };
     SlotsPrem.prototype.getBonus = function () {
         return this.bonus;
     };
-    // Método para generar el resultado (sobrescribe el del padre)
     SlotsPrem.prototype.generarResultado = function (cantidadDeRodillos) {
         var _this = this;
         if (cantidadDeRodillos === void 0) { cantidadDeRodillos = 7; }
@@ -49,7 +41,6 @@ var SlotsPrem = /** @class */ (function (_super) {
             return _this.rodillos[Math.floor(Math.random() * _this.rodillos.length)];
         });
     };
-    // Método para jugar (usando generarResultado del padre)
     SlotsPrem.prototype.jugar = function () {
         if (this.apuestaActual === 0) {
             console.log("Debes realizar una apuesta antes de jugar.");
@@ -57,33 +48,37 @@ var SlotsPrem = /** @class */ (function (_super) {
         }
         var resultado = this.generarResultado(7);
         console.log("Resultado:", resultado.join(""));
-        if (resultado.every(function (simbolo) { return simbolo === resultado[0]; })) {
-            console.log("¡Jackpot Premium! Los 7 símbolos son iguales. 🎉✨");
-            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicador + this.bonus);
+        var simboloMasFrecuente = resultado.reduce(function (maxSimbolo, simbolo) {
+            return resultado.filter(function (s) { return s === simbolo; }).length > resultado.filter(function (s) { return s === maxSimbolo; }).length ? simbolo : maxSimbolo;
+        }, resultado[0]);
+        var cantidadMaxima = resultado.filter(function (s) { return s === simboloMasFrecuente; }).length;
+        if (cantidadMaxima === 7) {
+            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicadorBonus + this.bonus);
+            console.log("¡Jackpot! Todos los símbolos son iguales. ¡Felicitaciones!");
         }
-        else if (new Set(resultado.slice(0, 3)).size === 1) {
-            console.log("¡Ganaste! Tres símbolos iguales.");
-            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicadoresExtras.tresSimbolosIguales);
+        else if (cantidadMaxima === 6) {
+            console.log("¡Seis iguales! Has ganado un premio especial.");
+            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicadorMasSimbolos);
         }
-        else if (new Set(resultado).size === 3) {
-            console.log("¡Ganaste! Tres pares iguales.");
-            this.billetera.agregarSaldo(this.apuestaActual * 5);
+        else if (cantidadMaxima === 5) {
+            console.log("¡Cinco iguales! Has ganado un premio increíble.");
+            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicadorMasSimbolos);
         }
-        else if (resultado[0] === resultado[1]) {
-            console.log("¡Ganaste! Dos símbolos iguales.");
-            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicadoresExtras.dosSimbolosIguales);
+        else if (cantidadMaxima === 4) {
+            console.log("¡Cuatro iguales! Has ganado un premio especial.");
+            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicadorMasSimbolos);
         }
-        else if (resultado[0] === resultado[1] && resultado[1] === resultado[2]) {
-            console.log("¡Ganaste! Tres símbolos iguales en las primeras posiciones.");
-            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicadoresExtras.tresSimbolosIguales);
+        else if (cantidadMaxima === 3) {
+            console.log("¡Tres iguales! Has ganado un premio.");
+            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicador);
+        }
+        else if (cantidadMaxima === 2) {
+            console.log("¡Hay Dos iguales! Has ganado un premio.");
+            this.billetera.agregarSaldo(this.apuestaActual * this.multiplicador);
         }
         else {
             console.log("Perdiste.");
-            this.billetera.restarSaldo(this.apuestaActual); // Pierdes la apuesta
         }
-        // Actualizar saldo y mostrar resultados finales
-        console.log("Saldo actualizado: $".concat(this.billetera.obtenerSaldo()));
-        // Reiniciar apuestas y ganancias
         this.apuestaActual = 0;
     };
     SlotsPrem.prototype.instruccionJuego = function () {

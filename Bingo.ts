@@ -1,4 +1,4 @@
-import { Apuesta } from "./Interfaz";
+﻿import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
 import { Billetera } from "./Billetera";
 
@@ -11,11 +11,10 @@ class Bingo extends Juego implements Apuesta {
     private apuestaActual: number = 0;
     private ganancias: number = 0;
     private perdidas: number = 0;
-    protected premio: number = 1000;  // Premio fijo 
     protected juegoEnCurso: boolean = false;
 
     constructor(billetera: Billetera) {
-        super("Bingo", "Juego de Casino", 1000, billetera);
+        super("Bingo", "Juego de Casino", 50, billetera);
         this.carton = this.generarCarton();
         this.bolasLlamadas = this.generarBolas();
         this.saldo = 0;  // Iniciar saldo en 0 o puedes definirlo a una cantidad predeterminada si lo deseas
@@ -112,18 +111,19 @@ class Bingo extends Juego implements Apuesta {
     // Métodos de la interfaz Apuesta
     realizarApuesta(monto: number): void {
         if (monto < this.apuestaMinima()) {
-            console.log(`La apuesta mínima es $${this.apuestaMinima()} y no has alcanzado ese monto.`);
+            console.log("El monto apostado es menor que la apuesta mínima.");
             return;
+        } else if (monto > this.billetera.obtenerSaldo()) {
+            console.log("Saldo insuficiente para realizar la apuesta.");
+            return;
+        } else {
+            this.billetera.restarSaldo(monto);
+            this.apuestaActual = monto; // Registrar la apuesta actual
+            this.resultado = ''; // Reiniciar resultado al realizar una nueva apuesta
+            console.log(`Apuesta realizada con éxito. Monto apostado: $${monto}`);
         }
-
-        if (monto > this.saldo) {
-            console.log(`No tienes suficiente saldo. Tu saldo actual es $${this.saldo}, pero intentas apostar $${monto}.`);
-            return;  // No permitir la apuesta si el monto es mayor que el saldo
-        }
-
-        this.apuestaActual = monto;
-        console.log(`Apuesta de $${monto} realizada en el juego ${this.nombre}.`);
     }
+
 
     // Método para actualizar el saldo después de cada jugada
     private actualizarSaldo(): void {
@@ -138,7 +138,7 @@ class Bingo extends Juego implements Apuesta {
             console.log(`Perdiste. Has perdido $${this.apuestaActual}.`);
         }
 
-        console.log(`Saldo actualizado: $${this.saldo}`);
+        console.log(`Saldo actualizado: $${this.billetera.obtenerSaldo() + this.saldo}`);
         this.juegoEnCurso = false; // Finalizar el juego
         this.apuestaActual = 0; // Reiniciar la apuesta actual
     }
