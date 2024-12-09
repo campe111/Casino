@@ -1,5 +1,23 @@
 {
   "dependencies": {
     "inquirer": "^12.1.0"
-  }
+  },
+  "name": "casino",
+  "version": "1.0.0",
+  "description": "Casino tp Final",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/campe111/Casino.git"
+  },
+  "author": "Brian Ocampos , Thomas Echeverria, Celeste Ruspil, Wanda Hernandez, Marina Briceño",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/campe111/Casino/issues"
+  },
+  "homepage": "https://github.com/campe111/Casino#readme"
 }

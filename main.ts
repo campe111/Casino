@@ -374,7 +374,6 @@ const mostrarInfoUsuario = async () => {
     ]);
     casino.mostrarInfoUsuario(nombreUsuario);
 };
-
 // -----------------------------------------------------------------------------------------------------------
 // Función para iniciar un juego
 
