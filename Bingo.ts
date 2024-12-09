@@ -1,9 +1,10 @@
 import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
+import { Billetera } from "./Billetera";
 
 class Bingo extends Juego implements Apuesta {
     private carton: number[] = [];
-    private saldo: number;
+    public saldo: number;
     private resultado: string = '';
     private bolasLlamadas: number[] = [];
     private bolasMarcadas: number[] = [];
@@ -13,11 +14,12 @@ class Bingo extends Juego implements Apuesta {
     protected premio: number = 1000;  // Premio fijo 
     protected juegoEnCurso: boolean = false;
 
-    constructor() {
-        super("Bingo", "Juego de Casino", 1000);
+    constructor(billetera: Billetera) {
+        super("Bingo", "Juego de Casino", 1000, billetera);
         this.carton = this.generarCarton();
         this.bolasLlamadas = this.generarBolas();
         this.saldo = 0;  // Iniciar saldo en 0 o puedes definirlo a una cantidad predeterminada si lo deseas
+        this.billetera = billetera;
     }
 
     bingoFinal(): void {
@@ -30,8 +32,8 @@ class Bingo extends Juego implements Apuesta {
     // Genera el cartón de bingo (15 números entre 1 y 90)
     private generarCarton(): number[] {
         const carton: number[] = [];
-        while (carton.length < 15) {
-            const numero = Math.floor(Math.random() * 90) + 1;
+        while (carton.length < 15) { 
+            const numero = Math.floor(Math.random() * 90) + 1; // Genera un número aleatorio entre 1 y 90
             if (!carton.includes(numero)) {
                 carton.push(numero);
             }

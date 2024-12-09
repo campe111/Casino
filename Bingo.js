@@ -19,8 +19,8 @@ exports.Bingo = void 0;
 var Juego_1 = require("./Juego");
 var Bingo = /** @class */ (function (_super) {
     __extends(Bingo, _super);
-    function Bingo() {
-        var _this = _super.call(this, "Bingo", "Juego de Casino", 1000) || this;
+    function Bingo(billetera) {
+        var _this = _super.call(this, "Bingo", "Juego de Casino", 1000, billetera) || this;
         _this.carton = [];
         _this.resultado = '';
         _this.bolasLlamadas = [];
@@ -33,6 +33,7 @@ var Bingo = /** @class */ (function (_super) {
         _this.carton = _this.generarCarton();
         _this.bolasLlamadas = _this.generarBolas();
         _this.saldo = 0; // Iniciar saldo en 0 o puedes definirlo a una cantidad predeterminada si lo deseas
+        _this.billetera = billetera;
         return _this;
     }
     Bingo.prototype.bingoFinal = function () {
@@ -45,7 +46,7 @@ var Bingo = /** @class */ (function (_super) {
     Bingo.prototype.generarCarton = function () {
         var carton = [];
         while (carton.length < 15) {
-            var numero = Math.floor(Math.random() * 90) + 1;
+            var numero = Math.floor(Math.random() * 90) + 1; // Genera un número aleatorio entre 1 y 90
             if (!carton.includes(numero)) {
                 carton.push(numero);
             }

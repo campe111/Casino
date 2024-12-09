@@ -37,15 +37,141 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var readlineSync = require("readline-sync");
+var inquirer_1 = require("inquirer");
+var fs = require("fs");
 var SlotsSTD_1 = require("./SlotsSTD");
 var SlotsPrem_1 = require("./SlotsPrem");
 var BlackJack_1 = require("./BlackJack");
 var Bingo_1 = require("./Bingo");
 var Casino_1 = require("./Casino");
-var inquirer_1 = require("inquirer");
-var fs = require("fs");
+var Billetera_1 = require("./Billetera");
 // Instancia del casino
 var casino = new Casino_1.Casino();
+// -----------------------------------------------------------------------------------------------------------
+// Función para mostrar el título del casino
+var mostrarTituloCasino = function () {
+    console.clear(); // Limpia la consola para un diseño limpio
+    console.log("\n======================================== \n    \u2588\u2588\u2557  \u2588\u2588\u2557\u2588\u2588\u2557\u2588\u2588\u2588\u2557   \u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557        \n    \u2588\u2588\u2551 \u2588\u2588\u2554\u255D\u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255D        \n    \u2588\u2588\u2588\u2588\u2588\u2554\u255D \u2588\u2588\u2551\u2588\u2588\u2554\u2588\u2588\u2557 \u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2588\u2557       \n    \u2588\u2588\u2554\u2550\u2588\u2588\u2557 \u2588\u2588\u2551\u2588\u2588\u2551\u255A\u2588\u2588\u2557\u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551       \n    \u2588\u2588\u2551  \u2588\u2588\u2557\u2588\u2588\u2551\u2588\u2588\u2551 \u255A\u2588\u2588\u2588\u2588\u2551\u255A\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255D       \n    \u255A\u2550\u255D  \u255A\u2550\u255D\u255A\u2550\u255D\u255A\u2550\u255D  \u255A\u2550\u2550\u2550\u255D \u255A\u2550\u2550\u2550\u2550\u2550\u255D  \n=========================================\n        KING OF COING CASINO\n=========================================\n    ");
+};
+var menuOpciones = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var opcion, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                mostrarTituloCasino();
+                return [4 /*yield*/, inquirer_1.default.prompt([
+                        {
+                            type: 'list',
+                            name: 'opcion',
+                            message: 'Bienvenido al Casino KING OF COING. \n Elija una opción:',
+                            choices: [
+                                { name: 'Registrar Nuevo Usuario', value: 'registrar' },
+                                { name: 'Acceder a un Usuario', value: 'acceder' },
+                                { name: 'Mostrar Información del Usuario', value: 'mostrar' },
+                                { name: 'Gestionar Billetera', value: 'billetera' },
+                                { name: 'Juegos', value: 'juegos' },
+                                { name: 'Instrucciones', value: 'instrucciones' },
+                                { name: 'Salir', value: 'salir' }
+                            ]
+                        }
+                    ])];
+            case 1:
+                opcion = (_b.sent()).opcion;
+                _a = opcion;
+                switch (_a) {
+                    case 'registrar': return [3 /*break*/, 2];
+                    case 'acceder': return [3 /*break*/, 4];
+                    case 'mostrar': return [3 /*break*/, 6];
+                    case 'billetera': return [3 /*break*/, 8];
+                    case 'juegos': return [3 /*break*/, 10];
+                    case 'instrucciones': return [3 /*break*/, 12];
+                    case 'salir': return [3 /*break*/, 14];
+                }
+                return [3 /*break*/, 15];
+            case 2: return [4 /*yield*/, registrarUsuario()];
+            case 3:
+                _b.sent();
+                return [3 /*break*/, 16];
+            case 4: return [4 /*yield*/, accederUsuario()];
+            case 5:
+                _b.sent();
+                return [3 /*break*/, 16];
+            case 6: return [4 /*yield*/, mostrarInfoUsuario()];
+            case 7:
+                _b.sent();
+                return [3 /*break*/, 16];
+            case 8: return [4 /*yield*/, menuBilletera()];
+            case 9:
+                _b.sent(); // Submenú para gestionar la billetera
+                return [3 /*break*/, 16];
+            case 10: return [4 /*yield*/, menuJuegos()];
+            case 11:
+                _b.sent(); // Llamar al submenú de juegos
+                return [3 /*break*/, 16];
+            case 12: return [4 /*yield*/, imprimirInstrucciones()];
+            case 13:
+                _b.sent();
+                return [3 /*break*/, 16];
+            case 14:
+                console.log('Saliendo...');
+                return [3 /*break*/, 16];
+            case 15:
+                console.log('Opción no válida.');
+                return [3 /*break*/, 16];
+            case 16:
+                if (!(opcion !== 'salir')) return [3 /*break*/, 18];
+                return [4 /*yield*/, menuOpciones()];
+            case 17:
+                _b.sent();
+                _b.label = 18;
+            case 18: return [2 /*return*/];
+        }
+    });
+}); };
+menuOpciones();
+var menuBilletera = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var opcion, monto;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, inquirer_1.default.prompt([
+                    {
+                        type: 'list',
+                        name: 'opcion',
+                        message: 'Seleccione una opción para la Billetera:',
+                        choices: [
+                            { name: 'Agregar Saldo', value: 'agregar' },
+                            { name: 'Ver Saldo', value: 'ver' },
+                            { name: 'Volver al Menú Principal', value: 'volver' }
+                        ]
+                    }
+                ])];
+            case 1:
+                opcion = (_a.sent()).opcion;
+                switch (opcion) {
+                    case 'agregar':
+                        monto = readlineSync.questionInt('Ingrese la cantidad a agregar: ');
+                        billetera.agregarSaldo(monto);
+                        break;
+                    case 'ver':
+                        console.log("Saldo actual: $".concat(billetera.obtenerSaldo()));
+                        break;
+                    case 'volver':
+                        console.log('Volviendo al menú principal...');
+                        return [2 /*return*/];
+                    default:
+                        console.log('Opción no válida.');
+                        break;
+                }
+                if (!(opcion !== 'volver')) return [3 /*break*/, 3];
+                return [4 /*yield*/, menuBilletera()];
+            case 2:
+                _a.sent();
+                _a.label = 3;
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+// -----------------------------------------------------------------------------------------------------------
 // Función para leer e imprimir el contenido de un archivo de texto con las instrucciones
 var imprimirInstrucciones = function () { return __awaiter(void 0, void 0, void 0, function () {
     var archivoRuta, data, err_1;
@@ -80,6 +206,7 @@ var imprimirInstrucciones = function () { return __awaiter(void 0, void 0, void 
         }
     });
 }); };
+// -----------------------------------------------------------------------------------------------------------
 // Pregunta para validar el nombre de usuario
 var validateNombreUsuario = function (input) { return __awaiter(void 0, void 0, void 0, function () {
     var usuarioExistente;
@@ -94,6 +221,7 @@ var validateNombreUsuario = function (input) { return __awaiter(void 0, void 0, 
         return [2 /*return*/, true];
     });
 }); };
+// -----------------------------------------------------------------------------------------------------------
 // Pregunta para validar el DNI
 var validateDNI = function (input) { return __awaiter(void 0, void 0, void 0, function () {
     var dni, usuarioExistente;
@@ -109,6 +237,7 @@ var validateDNI = function (input) { return __awaiter(void 0, void 0, void 0, fu
         return [2 /*return*/, true];
     });
 }); };
+// -----------------------------------------------------------------------------------------------------------
 var registrarUsuario = function () { return __awaiter(void 0, void 0, void 0, function () {
     var usuarioData;
     return __generator(this, function (_a) {
@@ -166,6 +295,7 @@ var registrarUsuario = function () { return __awaiter(void 0, void 0, void 0, fu
         }
     });
 }); };
+// -----------------------------------------------------------------------------------------------------------
 // Función para acceder a un usuario
 var accederUsuario = function () { return __awaiter(void 0, void 0, void 0, function () {
     var nombreUsuario, usuario;
@@ -323,6 +453,7 @@ var modificarDatosUsuario = function (usuario) { return __awaiter(void 0, void 0
         }
     });
 }); };
+// -----------------------------------------------------------------------------------------------------------
 //Funcion para mostrar Info del Usuario
 var mostrarInfoUsuario = function () { return __awaiter(void 0, void 0, void 0, function () {
     var nombreUsuario;
@@ -342,55 +473,99 @@ var mostrarInfoUsuario = function () { return __awaiter(void 0, void 0, void 0, 
         }
     });
 }); };
+// -----------------------------------------------------------------------------------------------------------
 // Función para iniciar un juego
-var iniciarJuego = function (juego) {
-    console.log("Iniciando el juego: ".concat(juego));
-    switch (juego) {
-        case 'Slots STD':
-            var slotsSTD = new SlotsSTD_1.SlotsSTD();
-            var saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
-            slotsSTD.cargarSaldo(saldoSlotsSTD);
-            console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos");
-            var apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
-            slotsSTD.realizarApuesta(apuestaSlotsSTD);
-            slotsSTD.jugar();
-            slotsSTD.actualizarSaldo();
-            break;
-        case 'Slots Premium':
-            var slotsPrem = new SlotsPrem_1.SlotsPrem(); // Instancia del juego Slots Premium
-            var saldoSlotsPremium = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots Premium? ');
-            slotsPrem.cargarSaldo(saldoSlotsPremium);
-            console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos");
-            var apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
-            slotsPrem.realizarApuesta(apuestaSlotsPremium);
-            slotsPrem.jugar();
-            slotsPrem.actualizarSaldo();
-            break;
-        case 'Blackjack':
-            // Crear una instancia del juego BlackJack
-            var blackJack = new BlackJack_1.BlackJack(); // Instancia del juego BlackJack
-            var saldoBlackJack = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Blackjack? ');
-            blackJack.cargarSaldo(saldoBlackJack);
-            var apuestaBlackJack = readlineSync.questionInt('¿Cuánto deseas apostar en Blackjack? ');
-            blackJack.realizarApuesta(apuestaBlackJack);
-            blackJack.repartirCartas(3);
-            blackJack.plantarse();
-            break;
-        case 'Bingo':
-            var bingo = new Bingo_1.Bingo(); // Instancia del juego Bingo
-            var saldoBingo = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Bingo? ');
-            bingo.cargarSaldo(saldoBingo);
-            var apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
-            bingo.realizarApuesta(apuestaBingo);
-            bingo.jugar();
-            // Llama al método jugar() del juego Bingo
-            bingo.bingoFinal();
-            break;
-        default:
-            console.log('Opción no válida.');
-            break;
-    }
-};
+var billetera = new Billetera_1.Billetera(); // Instancia de la billetera
+var iniciarJuego = function (juego) { return __awaiter(void 0, void 0, void 0, function () {
+    var slotsSTD, saldoSlotsSTD, jugarSlotsSTD, apuestaSlotsSTD, slotsPrem, saldoSlotsPremium, jugarSlotsPremium, apuestaSlotsPremium, blackJack, saldoBlackJack, jugarBlackJack, apuestaBlackJack, bingo, saldoBingo, jugarBingo, apuestaBingo;
+    return __generator(this, function (_a) {
+        console.log("Iniciando el juego: ".concat(juego));
+        switch (juego) {
+            case 'Slots STD':
+                slotsSTD = new SlotsSTD_1.SlotsSTD(billetera);
+                saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
+                slotsSTD.cargarSaldo(saldoSlotsSTD);
+                jugarSlotsSTD = true;
+                while (jugarSlotsSTD) {
+                    console.log("La apuesta mínima es de 20 pesos y la máxima es de 500 pesos");
+                    apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
+                    slotsSTD.realizarApuesta(apuestaSlotsSTD);
+                    slotsSTD.jugar();
+                    slotsSTD.actualizarSaldo();
+                    if (slotsSTD.billetera.obtenerSaldo() <= 0) {
+                        console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                        jugarSlotsSTD = false;
+                    }
+                    else {
+                        jugarSlotsSTD = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                    }
+                }
+                break;
+            case 'Slots Premium':
+                slotsPrem = new SlotsPrem_1.SlotsPrem(billetera);
+                saldoSlotsPremium = readlineSync.questionInt("¿Cuánto saldo deseas cargar en Slots Premium? ");
+                slotsPrem.cargarSaldo(saldoSlotsPremium);
+                jugarSlotsPremium = true;
+                while (jugarSlotsPremium) {
+                    console.log("La apuesta minima es de 20 pesos y la maxima es de 500 pesos");
+                    apuestaSlotsPremium = readlineSync.questionInt("¿Cuanto deseas apostar en Slots Premium? ");
+                    slotsPrem.realizarApuesta(apuestaSlotsPremium);
+                    slotsPrem.jugar();
+                    slotsPrem.actualizarSaldo();
+                    if (slotsPrem.billetera.obtenerSaldo() <= 0) {
+                        console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                        jugarSlotsPremium = false;
+                    }
+                    else {
+                        jugarSlotsPremium = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                    }
+                }
+                break;
+            case 'Blackjack':
+                blackJack = new BlackJack_1.BlackJack(billetera);
+                saldoBlackJack = readlineSync.questionInt("¿Cuanto saldo deseas cargar en Blackjack? ");
+                blackJack.cargarSaldo(saldoBlackJack);
+                jugarBlackJack = true;
+                while (jugarBlackJack) {
+                    apuestaBlackJack = readlineSync.questionInt("¿Cuanto deseas apostar en Blackjack? ");
+                    blackJack.realizarApuesta(apuestaBlackJack);
+                    blackJack.repartirCartas(2);
+                    blackJack.plantarse();
+                    if (blackJack.billetera.obtenerSaldo() <= 0) {
+                        console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                        jugarBlackJack = false;
+                    }
+                    else {
+                        jugarBlackJack = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                    }
+                }
+                break;
+            case 'Bingo':
+                bingo = new Bingo_1.Bingo(billetera);
+                saldoBingo = readlineSync.questionInt("¿Cuánto saldo deseas cargar en Bingo? ");
+                bingo.cargarSaldo(saldoBingo);
+                jugarBingo = true;
+                while (jugarBingo) {
+                    apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
+                    bingo.realizarApuesta(apuestaBingo);
+                    bingo.jugar();
+                    bingo.bingoFinal();
+                    if (bingo.billetera.obtenerSaldo() <= 0) {
+                        console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                        jugarBingo = false;
+                    }
+                    else {
+                        jugarBingo = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                    }
+                }
+                break;
+            default:
+                console.log('Opción no válida.');
+                break;
+        }
+        return [2 /*return*/];
+    });
+}); };
 // Submenú de Juegos
 var menuJuegos = function () { return __awaiter(void 0, void 0, void 0, function () {
     var opcion;
@@ -441,79 +616,51 @@ var menuJuegos = function () { return __awaiter(void 0, void 0, void 0, function
         }
     });
 }); };
-// Función para mostrar el título del casino
-var mostrarTituloCasino = function () {
-    console.clear(); // Limpia la consola para un diseño limpio
-    console.log("\n======================================== \n    \u2588\u2588\u2557  \u2588\u2588\u2557\u2588\u2588\u2557\u2588\u2588\u2588\u2557   \u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557        \n    \u2588\u2588\u2551 \u2588\u2588\u2554\u255D\u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255D        \n    \u2588\u2588\u2588\u2588\u2588\u2554\u255D \u2588\u2588\u2551\u2588\u2588\u2554\u2588\u2588\u2557 \u2588\u2588\u2551\u2588\u2588\u2551  \u2588\u2588\u2588\u2557       \n    \u2588\u2588\u2554\u2550\u2588\u2588\u2557 \u2588\u2588\u2551\u2588\u2588\u2551\u255A\u2588\u2588\u2557\u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551       \n    \u2588\u2588\u2551  \u2588\u2588\u2557\u2588\u2588\u2551\u2588\u2588\u2551 \u255A\u2588\u2588\u2588\u2588\u2551\u255A\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255D       \n    \u255A\u2550\u255D  \u255A\u2550\u255D\u255A\u2550\u255D\u255A\u2550\u255D  \u255A\u2550\u2550\u2550\u255D \u255A\u2550\u2550\u2550\u2550\u2550\u255D  \n=========================================\n        KING OF COING CASINO\n=========================================\n    ");
-};
-// Menú principal
-var menuOpciones = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var opcion, _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                mostrarTituloCasino();
-                return [4 /*yield*/, inquirer_1.default.prompt([
-                        {
-                            type: 'list',
-                            name: 'opcion',
-                            message: 'Bienvenido al Casino KING OF COING. \n Elija una opción:',
-                            choices: [
-                                { name: 'Registrar Nuevo Usuario', value: 'registrar' },
-                                { name: 'Acceder a un Usuario', value: 'acceder' },
-                                { name: 'Mostrar Información del Usuario', value: 'mostrar' },
-                                { name: 'Juegos', value: 'juegos' },
-                                { name: 'Instrucciones', value: 'instrucciones' },
-                                { name: 'Salir', value: 'salir' }
-                            ]
-                        }
-                    ])];
-            case 1:
-                opcion = (_b.sent()).opcion;
-                _a = opcion;
-                switch (_a) {
-                    case 'registrar': return [3 /*break*/, 2];
-                    case 'acceder': return [3 /*break*/, 4];
-                    case 'mostrar': return [3 /*break*/, 6];
-                    case 'juegos': return [3 /*break*/, 8];
-                    case 'instrucciones': return [3 /*break*/, 10];
-                    case 'salir': return [3 /*break*/, 12];
-                }
-                return [3 /*break*/, 13];
-            case 2: return [4 /*yield*/, registrarUsuario()];
-            case 3:
-                _b.sent();
-                return [3 /*break*/, 14];
-            case 4: return [4 /*yield*/, accederUsuario()];
-            case 5:
-                _b.sent();
-                return [3 /*break*/, 14];
-            case 6: return [4 /*yield*/, mostrarInfoUsuario()];
-            case 7:
-                _b.sent();
-                return [3 /*break*/, 14];
-            case 8: return [4 /*yield*/, menuJuegos()];
-            case 9:
-                _b.sent(); // Llamar al submenú de juegos
-                return [3 /*break*/, 14];
-            case 10: return [4 /*yield*/, imprimirInstrucciones()];
-            case 11:
-                _b.sent();
-                return [3 /*break*/, 14];
-            case 12:
-                console.log('Saliendo...');
-                return [3 /*break*/, 14];
-            case 13:
-                console.log('Opción no válida.');
-                return [3 /*break*/, 14];
-            case 14:
-                if (!(opcion !== 'salir')) return [3 /*break*/, 16];
-                return [4 /*yield*/, menuOpciones()];
-            case 15:
-                _b.sent();
-                _b.label = 16;
-            case 16: return [2 /*return*/];
-        }
-    });
-}); };
-menuOpciones();
+// const iniciarJuego = (juego: string) => {
+//     console.log(`Iniciando el juego: ${juego}`);
+//     switch (juego) {
+//         case 'Slots STD':
+//             const slotsSTD = new SlotsSTD();
+//             const saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
+//             slotsSTD.cargarSaldo(saldoSlotsSTD);
+//             console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos")
+//             const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ')
+//             slotsSTD.realizarApuesta(apuestaSlotsSTD);
+//             slotsSTD.jugar();
+//             slotsSTD.actualizarSaldo();
+//             break;
+//         case 'Slots Premium':
+//             const slotsPrem = new SlotsPrem();  // Instancia del juego Slots Premium
+//             const saldoSlotsPremium = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots Premium? ');
+//             slotsPrem.cargarSaldo(saldoSlotsPremium);
+//             console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos");
+//             const apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
+//             slotsPrem.realizarApuesta(apuestaSlotsPremium);
+//             slotsPrem.jugar();
+//             slotsPrem.actualizarSaldo();
+//             break;
+//         case 'Blackjack': 
+//             // Crear una instancia del juego BlackJack
+//             const blackJack = new BlackJack();  // Instancia del juego BlackJack
+//             const saldoBlackJack = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Blackjack? ');
+//             blackJack.cargarSaldo(saldoBlackJack);
+//             const apuestaBlackJack = readlineSync.questionInt('¿Cuánto deseas apostar en Blackjack? ');
+//             blackJack.realizarApuesta(apuestaBlackJack);
+//             blackJack.repartirCartas(3);
+//             blackJack.plantarse();
+//             break;
+//         case 'Bingo':
+//             const bingo = new Bingo();  // Instancia del juego Bingo
+//             const saldoBingo = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Bingo? ');
+//             bingo.cargarSaldo(saldoBingo);
+//             const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
+//             bingo.realizarApuesta(apuestaBingo);
+//             bingo.jugar();
+//              // Llama al método jugar() del juego Bingo
+//             bingo.bingoFinal();
+//             break;
+//         default:
+//             console.log('Opción no válida.');
+//             break;
+//     }
+// };

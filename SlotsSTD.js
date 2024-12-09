@@ -19,8 +19,8 @@ exports.SlotsSTD = void 0;
 var Juego_1 = require("./Juego");
 var SlotsSTD = /** @class */ (function (_super) {
     __extends(SlotsSTD, _super);
-    function SlotsSTD() {
-        var _this = _super.call(this, 'Slots STD', 'Juego de Casino', 100) || this; // Ajusté el premio a 100 para simplificación
+    function SlotsSTD(billetera) {
+        var _this = _super.call(this, "Slots STD", "Juego de Casino", 100, billetera) || this; // Ajusté el premio a 100 para simplificación
         _this.rodillos = ["🍒", "🍑", "🍐", "🍏"]; // Posibles símbolos del juego
         _this.apuestaActual = 0; // Al principio no hay apuesta
         _this.saldoGanado = 0; // No se ha ganado nada todavía
@@ -41,21 +41,19 @@ var SlotsSTD = /** @class */ (function (_super) {
     };
     // Método para realizar una apuesta
     SlotsSTD.prototype.realizarApuesta = function (monto) {
-        if (monto < this.apuestaMinimaPermitida) {
-            console.log("La apuesta m\u00EDnima es $".concat(this.apuestaMinimaPermitida, "."));
-            return;
+        if (monto < 20) {
+            console.log("La apuesta es menor que la mínima permitida.");
         }
-        if (monto > this.apuestaMaximaPermitida) {
-            console.log("La apuesta m\u00E1xima es $".concat(this.apuestaMaximaPermitida, "."));
-            return;
+        else if (monto > 500) {
+            console.log("La apuesta supera el máximo permitido.");
         }
-        if (monto > this.saldo) {
-            console.log("No tienes suficiente saldo. Tu saldo es $".concat(this.saldo, " y quieres apostar $").concat(monto, "."));
-            return;
+        else if (monto > this.billetera.obtenerSaldo()) {
+            console.log("Saldo insuficiente para realizar la apuesta.");
         }
-        this.apuestaActual = monto; // Guardamos el monto apostado
-        this.saldo -= monto; // Restamos el monto apostado del saldo
-        console.log("Apuesta de $".concat(monto, " realizada. Saldo restante: $").concat(this.saldo));
+        else {
+            this.billetera.restarSaldo(monto);
+            console.log("Apuesta realizada: ".concat(monto));
+        }
     };
     // Método para obtener el dinero ganado
     SlotsSTD.prototype.dineroGanado = function () {
@@ -78,9 +76,7 @@ var SlotsSTD = /** @class */ (function (_super) {
         var _this = this;
         if (cantidadDeRodillos === void 0) { cantidadDeRodillos = 4; }
         // Generar resultado con cantidad dinámica de rodillos
-        return Array.from({ length: cantidadDeRodillos }, function () {
-            return _this.rodillos[Math.floor(Math.random() * _this.rodillos.length)];
-        });
+        return Array.from({ length: cantidadDeRodillos }, function () { return _this.rodillos[Math.floor(Math.random() * _this.rodillos.length)]; });
     };
     // Método para jugar
     SlotsSTD.prototype.jugar = function () {
