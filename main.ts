@@ -1,15 +1,126 @@
-import * as readlineSync from 'readline-sync'; 
+﻿import * as readlineSync from 'readline-sync'; 
+import inquirer from 'inquirer';
+import * as fs from 'fs';
 import { SlotsSTD } from './SlotsSTD'; 
 import { SlotsPrem } from './SlotsPrem'; 
 import { BlackJack } from './BlackJack'; 
 import { Bingo } from './Bingo';
 import { Casino } from './Casino';
 import { Usuario } from './Usuario';
-import inquirer from 'inquirer';
-import * as fs from 'fs';
+import { Billetera } from './Billetera';
 
 // Instancia del casino
 const casino = new Casino();
+// -----------------------------------------------------------------------------------------------------------
+// Función para mostrar el título del casino
+const mostrarTituloCasino = () => {
+    console.clear(); // Limpia la consola para un diseño limpio
+    console.log(`
+======================================== 
+    ██╗  ██╗██╗███╗   ██╗ ██████╗        
+    ██║ ██╔╝██║████╗  ██║██╔════╝        
+    █████╔╝ ██║██╔██╗ ██║██║  ███╗       
+    ██╔═██╗ ██║██║╚██╗██║██║   ██║       
+    ██║  ██╗██║██║ ╚████║╚██████╔╝       
+    ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝  
+=========================================
+        KING OF COING CASINO
+=========================================
+    `);
+};
+
+    
+const menuOpciones = async () => {
+    mostrarTituloCasino();
+
+    const { opcion } = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'opcion',
+            message: 'Bienvenido al Casino KING OF COING. \n Elija una opción:',
+            choices: [
+                { name: 'Registrar Nuevo Usuario', value: 'registrar' },
+                { name: 'Acceder a un Usuario', value: 'acceder' },
+                { name: 'Mostrar Información del Usuario', value: 'mostrar' },
+                { name: 'Gestionar Billetera', value: 'billetera' },
+                { name: 'Juegos', value: 'juegos' },
+                { name: 'Instrucciones', value: 'instrucciones' },
+                { name: 'Salir', value: 'salir' }
+            ]
+        }
+    ]);
+
+    switch (opcion) {
+        case 'registrar':
+            await registrarUsuario();
+            break;
+        case 'acceder':
+            await accederUsuario();
+            break;
+        case 'mostrar':
+            await mostrarInfoUsuario();
+            break;
+        case 'billetera':
+            await menuBilletera();  // Submenú para gestionar la billetera
+            break;
+        case 'juegos':
+            await menuJuegos();  // Llamar al submenú de juegos
+            break;
+        case 'instrucciones':
+            await imprimirInstrucciones();
+            break;
+        case 'salir':
+            console.log('Saliendo...');
+            break;
+        default:
+            console.log('Opción no válida.');
+            break;
+    }
+
+    if (opcion !== 'salir') {
+        await menuOpciones();
+    }
+};
+
+menuOpciones();
+
+const menuBilletera = async () => {
+    const { opcion } = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'opcion',
+            message: 'Seleccione una opción para la Billetera:',
+            choices: [
+                { name: 'Agregar Saldo', value: 'agregar' },
+                { name: 'Ver Saldo', value: 'ver' },
+                { name: 'Volver al Menú Principal', value: 'volver' }
+            ]
+        }
+    ]);
+
+    switch (opcion) {
+        case 'agregar':
+            const monto = readlineSync.questionInt('Ingrese la cantidad a agregar: ');
+            billetera.agregarSaldo(monto);
+            break;
+        case 'ver':
+            console.log(`Saldo actual: $${billetera.obtenerSaldo()}`);
+            break;
+        case 'volver':
+            console.log('Volviendo al menú principal...');
+            return;
+        default:
+            console.log('Opción no válida.');
+            break;
+    }
+
+    if (opcion !== 'volver') {
+        await menuBilletera();
+    }
+};
+
+// -----------------------------------------------------------------------------------------------------------
+
 
 // Función para leer e imprimir el contenido de un archivo de texto con las instrucciones
 const imprimirInstrucciones = async () => {
@@ -34,7 +145,7 @@ const imprimirInstrucciones = async () => {
         console.error('Error al leer el archivo de instrucciones:', err);
     }
 };
-
+// -----------------------------------------------------------------------------------------------------------
 // Pregunta para validar el nombre de usuario
 const validateNombreUsuario = async (input: string) => {
     if (input.trim() === '') {
@@ -49,7 +160,7 @@ const validateNombreUsuario = async (input: string) => {
 
     return true;
 };
-
+// -----------------------------------------------------------------------------------------------------------
 // Pregunta para validar el DNI
 const validateDNI = async (input: string) => {
     const dni = parseInt(input, 10);
@@ -65,7 +176,7 @@ const validateDNI = async (input: string) => {
 
     return true;
 };
-
+// -----------------------------------------------------------------------------------------------------------
 const registrarUsuario = async () => {
     const usuarioData = await inquirer.prompt([
         {
@@ -97,7 +208,7 @@ const registrarUsuario = async () => {
             filter: (input: string) => parseInt(input, 10), // Convertimos a número
         },
         {
-            type: 'input',
+            type: 'input', 
             name: 'saldo',
             message: 'Ingrese el saldo de su cuenta:',
             validate: (input: string) => {
@@ -116,6 +227,8 @@ const registrarUsuario = async () => {
 
     casino.registrarUsuario(usuarioData.nombreUsuario, usuarioData.dni, usuarioData.edad, usuarioData.saldo);
 };
+
+// -----------------------------------------------------------------------------------------------------------
 // Función para acceder a un usuario
 const accederUsuario = async () => {
     const { nombreUsuario } = await inquirer.prompt([
@@ -249,7 +362,7 @@ const modificarDatosUsuario = async (usuario: Usuario) => {
     // Volver al submenu
     await submenuUsuario(usuario);
 };
-
+// -----------------------------------------------------------------------------------------------------------
 //Funcion para mostrar Info del Usuario
 const mostrarInfoUsuario = async () => {
     const { nombreUsuario } = await inquirer.prompt([
@@ -262,50 +375,97 @@ const mostrarInfoUsuario = async () => {
     casino.mostrarInfoUsuario(nombreUsuario);
 };
 
+// -----------------------------------------------------------------------------------------------------------
 // Función para iniciar un juego
 
-const iniciarJuego = (juego: string) => {
+const billetera = new Billetera();  // Instancia de la billetera
+const iniciarJuego = async (juego: string) => {
     console.log(`Iniciando el juego: ${juego}`);
 
     switch (juego) {
-        case 'Slots  STD':
-            const slotsSTD = new SlotsSTD();  // Instancia del juego SlotsSTD
-            const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
-            slotsSTD.realizarApuesta(apuestaSlotsSTD);
-            slotsSTD.jugar();
+        case 'Slots STD':
+            const slotsSTD = new SlotsSTD(billetera);
+            const saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
+            slotsSTD.cargarSaldo(saldoSlotsSTD);
+            let jugarSlotsSTD = true;
+            while (jugarSlotsSTD) {
+                console.log("La apuesta mínima es de 20 pesos y la máxima es de 500 pesos");
+                const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
+                slotsSTD.realizarApuesta(apuestaSlotsSTD);
+                slotsSTD.jugar();
+                slotsSTD.actualizarSaldo();
+
+                if (slotsSTD.billetera.obtenerSaldo() <= 0) {
+                    console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                    jugarSlotsSTD = false;
+                } else {
+                    jugarSlotsSTD = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                }
+            }
             break;
         case 'Slots Premium':
-            const slotsPrem = new SlotsPrem();  // Instancia del juego Slots Premium
-            const apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
-            slotsPrem.realizarApuesta(apuestaSlotsPremium);
-            slotsPrem.jugar();  // Llama al método jugar() del juego Slots Premium
+            const slotsPrem = new SlotsPrem(billetera);
+            const saldoSlotsPremium = readlineSync.questionInt("¿Cuánto saldo deseas cargar en Slots Premium? ");
+            slotsPrem.cargarSaldo(saldoSlotsPremium);
+            let jugarSlotsPremium = true;
+            while (jugarSlotsPremium) {
+                console.log("La apuesta minima es de 20 pesos y la maxima es de 500 pesos");
+                const apuestaSlotsPremium = readlineSync.questionInt("¿Cuanto deseas apostar en Slots Premium? ");
+                slotsPrem.realizarApuesta(apuestaSlotsPremium);
+                slotsPrem.jugar();
+                slotsPrem.actualizarSaldo();
+
+                if (slotsPrem.billetera.obtenerSaldo() <= 0) {
+                    console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                    jugarSlotsPremium = false;
+                } else {
+                    jugarSlotsPremium = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                }
+            }
             break;
         case 'Blackjack':
-            // Crear una instancia del juego BlackJack
-            const blackJack = new BlackJack();  // Instancia del juego BlackJack
-            const saldoBlackJack = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Blackjack? ');
+            const blackJack = new BlackJack(billetera);
+            const saldoBlackJack = readlineSync.questionInt("¿Cuanto saldo deseas cargar en Blackjack? ");
             blackJack.cargarSaldo(saldoBlackJack);
-            const apuestaBlackJack = readlineSync.questionInt('¿Cuánto deseas apostar en Blackjack? ');
-            blackJack.realizarApuesta(apuestaBlackJack);
-            blackJack.repartirCartas(3);
-            blackJack.plantarse();
+            let jugarBlackJack = true;
+            while (jugarBlackJack) {
+                const apuestaBlackJack = readlineSync.questionInt("¿Cuanto deseas apostar en Blackjack? ");
+                blackJack.realizarApuesta(apuestaBlackJack);
+                blackJack.repartirCartas(2);
+                blackJack.plantarse();
+
+                if (blackJack.billetera.obtenerSaldo() <= 0) {
+                    console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                    jugarBlackJack = false;
+                } else {
+                    jugarBlackJack = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                }
+            }
             break;
         case 'Bingo':
-            const bingo = new Bingo();  // Instancia del juego Bingo
-            const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
-            bingo.realizarApuesta(apuestaBingo);
-            bingo.jugar();  // Llama al método jugar() del juego Bingo
-            bingo.dineroPerdido();
-            bingo.dineroGanado();
+            const bingo = new Bingo(billetera);
+            const saldoBingo = readlineSync.questionInt("¿Cuánto saldo deseas cargar en Bingo? ");
+            bingo.cargarSaldo(saldoBingo);
+            let jugarBingo = true;
+            while (jugarBingo) {
+                const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
+                bingo.realizarApuesta(apuestaBingo);
+                bingo.jugar();
+                bingo.bingoFinal();
+
+                if (bingo.billetera.obtenerSaldo() <= 0) {
+                    console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                    jugarBingo = false;
+                } else {
+                    jugarBingo = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                }
+            }
             break;
         default:
             console.log('Opción no válida.');
             break;
     }
 };
-
-
-
 
 // Submenú de Juegos
 const menuJuegos = async () => {
@@ -323,15 +483,15 @@ const menuJuegos = async () => {
             ]
         }
     ]);
-
+    
     switch (opcion) {
         case 'slotsSTD':
             iniciarJuego('Slots STD');
             break;
-        case 'slotsPremium':
-            iniciarJuego('Slots Premium');
+            case 'slotsPremium':
+                iniciarJuego('Slots Premium');
             break;
-        case 'blackjack':
+            case 'blackjack':
             iniciarJuego('Blackjack');
             break;
         case 'bingo':
@@ -340,87 +500,64 @@ const menuJuegos = async () => {
         case 'volver':
             console.log('Volviendo al menú principal...');
             break;
-        default:
-            console.log('Opción no válida.');
-            break;
-    }
+            default:
+                console.log('Opción no válida.');
+                break;
+            }
 
-    
-    // Volver al submenú si no se seleccionó "volver"
-    if (opcion !== 'volver') {
-        await menuJuegos();
-    }
+            
+            // Volver al submenú si no se seleccionó "volver"
+            if (opcion !== 'volver') {
+                await menuJuegos();
+            }
 };
-
-// Función para mostrar el título del casino
-const mostrarTituloCasino = () => {
-    console.clear(); // Limpia la consola para un diseño limpio
-    console.log(`
-======================================== 
-    ██╗  ██╗██╗███╗   ██╗ ██████╗        
-    ██║ ██╔╝██║████╗  ██║██╔════╝        
-    █████╔╝ ██║██╔██╗ ██║██║  ███╗       
-    ██╔═██╗ ██║██║╚██╗██║██║   ██║       
-    ██║  ██╗██║██║ ╚████║╚██████╔╝       
-    ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝  
-=========================================
-        KING OF COING CASINO
-=========================================
-    `);
-};
-
-    
-// Menú principal
-const menuOpciones = async () => {
-    mostrarTituloCasino();
-
-    const { opcion } = await inquirer.prompt([
-        {
-            type: 'list',
-            name: 'opcion',
-            message: 'Bienvenido al Casino KING OF COING. \n Elija una opción:',
-            choices: [
-                { name: 'Registrar Nuevo Usuario', value: 'registrar' },
-                { name: 'Acceder a un Usuario', value: 'acceder' },
-                { name: 'Mostrar Información del Usuario', value: 'mostrar' },
-                { name: 'Juegos', value: 'juegos' },
-                { name: 'Instrucciones', value: 'instrucciones' },
-                { name: 'Salir', value: 'salir' }
-            ]
-        }
-        
-    ]);
-
-    switch (opcion) {
-        case 'registrar':
-            await registrarUsuario();
-            break;
-        case 'acceder':
-            await accederUsuario();
-            break;
-        case 'mostrar':
-            await mostrarInfoUsuario();
-            break;
-        case 'juegos':
-            await menuJuegos();  // Llamar al submenú de juegos
-            break;
-        case 'instrucciones':
-            await imprimirInstrucciones();
-            break;
-        case 'salir':
-            console.log('Saliendo...');
-            break;
-        default:
-            console.log('Opción no válida.');
-            break;
-    }
-
-    // Volver a mostrar el menú de opciones si no se ha salido
-    if (opcion !== 'salir') {
-        await menuOpciones();
-    }
-
-    
-};
-
-menuOpciones();
+            // const iniciarJuego = (juego: string) => {
+            //     console.log(`Iniciando el juego: ${juego}`);
+            
+            //     switch (juego) {
+            //         case 'Slots STD':
+            //             const slotsSTD = new SlotsSTD();
+            //             const saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
+            //             slotsSTD.cargarSaldo(saldoSlotsSTD);
+            //             console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos")
+            //             const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ')
+            //             slotsSTD.realizarApuesta(apuestaSlotsSTD);
+            //             slotsSTD.jugar();
+            //             slotsSTD.actualizarSaldo();
+                    
+            //             break;
+            //         case 'Slots Premium':
+            //             const slotsPrem = new SlotsPrem();  // Instancia del juego Slots Premium
+            //             const saldoSlotsPremium = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots Premium? ');
+            //             slotsPrem.cargarSaldo(saldoSlotsPremium);
+            //             console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos");
+            //             const apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
+            //             slotsPrem.realizarApuesta(apuestaSlotsPremium);
+            //             slotsPrem.jugar();
+            //             slotsPrem.actualizarSaldo();
+            //             break;
+            //         case 'Blackjack': 
+            //             // Crear una instancia del juego BlackJack
+            //             const blackJack = new BlackJack();  // Instancia del juego BlackJack
+            //             const saldoBlackJack = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Blackjack? ');
+            //             blackJack.cargarSaldo(saldoBlackJack);
+            //             const apuestaBlackJack = readlineSync.questionInt('¿Cuánto deseas apostar en Blackjack? ');
+            //             blackJack.realizarApuesta(apuestaBlackJack);
+            //             blackJack.repartirCartas(3);
+            //             blackJack.plantarse();
+            //             break;
+            //         case 'Bingo':
+            //             const bingo = new Bingo();  // Instancia del juego Bingo
+            //             const saldoBingo = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Bingo? ');
+            //             bingo.cargarSaldo(saldoBingo);
+            //             const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
+            //             bingo.realizarApuesta(apuestaBingo);
+            //             bingo.jugar();
+            //              // Llama al método jugar() del juego Bingo
+            //             bingo.bingoFinal();
+            //             break;
+            //         default:
+            //             console.log('Opción no válida.');
+            //             break;
+            //     }
+            // };

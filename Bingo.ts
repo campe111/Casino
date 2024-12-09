@@ -1,26 +1,39 @@
 import { Apuesta } from "./Interfaz";
 import { Juego } from "./Juego";
+import { Billetera } from "./Billetera";
 
 class Bingo extends Juego implements Apuesta {
     private carton: number[] = [];
+    public saldo: number;
+    private resultado: string = '';
     private bolasLlamadas: number[] = [];
     private bolasMarcadas: number[] = [];
     private apuestaActual: number = 0;
     private ganancias: number = 0;
     private perdidas: number = 0;
-    protected premio: number = 10000;  // Premio fijo 
+    protected premio: number = 1000;  // Premio fijo 
+    protected juegoEnCurso: boolean = false;
 
-    constructor() {
-        super("Bingo", "Juego de Casino", 100);
+    constructor(billetera: Billetera) {
+        super("Bingo", "Juego de Casino", 1000, billetera);
         this.carton = this.generarCarton();
         this.bolasLlamadas = this.generarBolas();
+        this.saldo = 0;  // Iniciar saldo en 0 o puedes definirlo a una cantidad predeterminada si lo deseas
+        this.billetera = billetera;
+    }
+
+    bingoFinal(): void {
+        if (this.juegoEnCurso) {
+            this.actualizarSaldo(); // Actualiza el saldo al finalizar el juego
+            this.mostrarSaldo();    // Muestra el saldo después de cada juego
+        }
     }
 
     // Genera el cartón de bingo (15 números entre 1 y 90)
     private generarCarton(): number[] {
         const carton: number[] = [];
-        while (carton.length < 15) {
-            const numero = Math.floor(Math.random() * 90) + 1;
+        while (carton.length < 15) { 
+            const numero = Math.floor(Math.random() * 90) + 1; // Genera un número aleatorio entre 1 y 90
             if (!carton.includes(numero)) {
                 carton.push(numero);
             }
@@ -50,8 +63,13 @@ class Bingo extends Juego implements Apuesta {
         console.table(cartonMarcado.join(' '));
     }
 
-    // Función principal del juego
+    // Función principal  del juego
     public jugar(): void {
+        if (this.apuestaActual <= 0) {
+            console.log("Carga saldo y realiza una apuesta antes de jugar.");
+            return; // Si no hay apuesta, no se puede jugar
+        }
+
         console.log("¡Comienza el juego de Bingo!");
 
         let bingo = false;
@@ -75,41 +93,78 @@ class Bingo extends Juego implements Apuesta {
                 break;
             }
         }
-            if (bingo) {
+
+        if (bingo) {
             console.log("¡Bingo! Has marcado todos los números.");
-            // Aquí ganaste el premio
-            this.ganancias = this.premio;
-            console.log(`¡Has ganado ${this.ganancias}!`);
+            this.resultado = 'Ganaste'; // Resultado de ganar
+            this.ganancias = this.premio; // Asignar el premio ganado
+            console.log(`¡Has ganado $${this.ganancias}!`);
         } else {
             console.log("El juego ha terminado, pero no hay Bingo.");
+            this.resultado = 'Perdiste'; // Resultado de perder
             this.ganancias = 0;  // No se gana nada si no hay Bingo
-        } 
-    } 
+        }
+
+        // Llamar a actualizar el saldo después de la jugada
+        this.actualizarSaldo();
+    }
 
     // Métodos de la interfaz Apuesta
     realizarApuesta(monto: number): void {
         if (monto < this.apuestaMinima()) {
-            console.log(`La apuesta mínima es ${this.apuestaMinima()} y no has alcanzado ese monto.`);
+            console.log(`La apuesta mínima es $${this.apuestaMinima()} y no has alcanzado ese monto.`);
             return;
         }
 
+        if (monto > this.saldo) {
+            console.log(`No tienes suficiente saldo. Tu saldo actual es $${this.saldo}, pero intentas apostar $${monto}.`);
+            return;  // No permitir la apuesta si el monto es mayor que el saldo
+        }
+
         this.apuestaActual = monto;
-        console.log(`Apuesta de ${monto} realizada en el juego ${this.nombre}.`);
+        console.log(`Apuesta de $${monto} realizada en el juego ${this.nombre}.`);
+    }
+
+    // Método para actualizar el saldo después de cada jugada
+    private actualizarSaldo(): void {
+        if (this.resultado === 'Ganaste') {
+            // Ganancias netas: Apuesta + Premio
+            const gananciasTotales = this.apuestaActual + this.ganancias;
+            this.saldo += gananciasTotales; // Sumar la apuesta + las ganancias al saldo
+            console.log(`¡Ganaste! Has obtenido $${this.ganancias} de ganancia neta.`);
+        } else if (this.resultado === 'Perdiste') {
+            // Si el jugador perdió, solo se debe restar la apuesta
+            this.saldo -= this.apuestaActual;
+            console.log(`Perdiste. Has perdido $${this.apuestaActual}.`);
+        }
+
+        console.log(`Saldo actualizado: $${this.saldo}`);
+        this.juegoEnCurso = false; // Finalizar el juego
+        this.apuestaActual = 0; // Reiniciar la apuesta actual
+    }
+
+    // Método para mostrar el saldo actual
+    public mostrarSaldo(): void {
+        console.log(`El saldo actual es: $${this.saldo}`);
     }
 
     dineroGanado(): number {
-        // Se ha calculado el premio al ganar el Bingo
         return this.ganancias;
     }
 
     dineroPerdido(): number {
-        // Se calcula la pérdida 
-        this.perdidas = this.apuestaActual - this.ganancias;  // La diferencia entre lo apostado y lo ganado
         return this.perdidas;
     }
 
     apuestaMinima(): number {
-        return 2500; // Ejemplo: Monto mínimo de apuesta es 2500
+        return 100; // Ejemplo: Monto mínimo de apuesta es 100
+    }
+
+    // Método para cargar saldo
+    cargarSaldo(monto: number): void {
+        this.saldo += monto;
+        console.log(`Saldo cargado: $${monto}. Saldo actual en billetera: $${this.saldo}`);
     }
 }
-export { Bingo };
+
+export { Bingo }
