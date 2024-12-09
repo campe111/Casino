@@ -8,12 +8,16 @@ export class SlotsSTD extends Juego implements Apuesta {
     protected saldoGanado: number; // Total de dinero ganado
     protected saldoPerdido: number; // Total de dinero perdido
     protected saldo: number; // Saldo disponible del jugador
+    private premioSlost: number;
+    private premioBasico: number;
     private apuestaMinimaPermitida: number; // Apuesta mínima permitida
     private apuestaMaximaPermitida: number; // Apuesta máxima permitida
 
     constructor() {
         super('Slots STD', 'Juego de Casino', 10000); // Ajusté el premio a 100 para simplificación
         this.rodillos = ["🍒", "🍑", "🍐", "🍏"]; // Posibles símbolos del juego
+        this.premioSlost = 10;
+        this.premioBasico = 2;
         this.apuestaActual = 0; // Al principio no hay apuesta
         this.saldoGanado = 0; // No se ha ganado nada todavía
         this.saldoPerdido = 0; // No se ha perdido nada todavía
@@ -87,35 +91,47 @@ export class SlotsSTD extends Juego implements Apuesta {
             return;
         }
 
-        // Generamos el resultado
+        // Generamos el resultado con 4 rodillos
         const resultado = this.generarResultado(4);
+
         console.log("Resultado:", resultado.join(""));
 
-        // Lógica de resultados con más combinaciones ganadoras
-        if (resultado.every((simbolo) => simbolo === resultado[0])) {
-            // Jackpot: todos los símbolos son iguales
-            console.log("¡Jackpot! Los símbolos son iguales.");
-            this.saldoGanado += this.apuestaActual * 15; // Gran premio con multiplicador x15
-        } else if (resultado.slice(0, 3).every((simbolo) => simbolo === resultado[0])) {
+        //const simboloMasFrecuente = resultado.reduce método reduce para iterar cada elemento de resultado y encontrar el símbolo que más veces se repite.
+        // La función compara la cantidad de veces que el símbolo actual (simbolo) aparece en el array con la cantidad de veces que aparece el símbolo actual más frecuente (maxSimbolo).
+        //Si el símbolo actual aparece más veces, lo considera el nuevo maxSimbolo; si no, mantiene el maxSimbolo anterior.
+        //const cantidadMaxima = resultado.filter(s => s === simboloMasFrecuente).length:
+        //Usa filter para contar cuántas veces aparece el simboloMasFrecuente en el array resultado.
+        //La longitud del array filtrado da la cantidad de veces que ese símbolo específico aparece en resultado.
+
+        const simboloMasFrecuente = resultado.reduce((maxSimbolo, simbolo) => {
+            return resultado.filter(s => s === simbolo).length > resultado.filter(s => s === maxSimbolo).length ? simbolo : maxSimbolo;
+        }, resultado[0]);
+
+        const cantidadMaxima = resultado.filter(s => s === simboloMasFrecuente).length;
+
+
+        // Jackpot: todos los símbolos son iguales
+        if (cantidadMaxima === 4) {
+            // Cuatro símbolos iguales
+            console.log("¡Cuatro iguales! Has ganado un premio especial.");
+            this.saldoGanado += this.apuestaActual * this.premioSlost;
+        } else if (cantidadMaxima === 3) {
             // Tres símbolos iguales
             console.log("¡Tres iguales! Has ganado un premio.");
-            this.saldoGanado += this.apuestaActual * 5; // Premio por tres iguales
-        } else if (new Set(resultado).size === 2) {
-            // Dos pares iguales
-            console.log("¡Ganaste! Dos pares iguales.");
-            this.saldoGanado += this.apuestaActual * 3; // Premio por dos pares iguales
-        } else if (resultado[0] === resultado[1]) {
-            // Caso de dos símbolos iguales
-            console.log("¡Ganaste! Dos símbolos iguales.");
-            this.saldoGanado += this.apuestaActual * 2; // Premio pequeño por dos iguales
+            this.saldoGanado += this.apuestaActual * this.premioBasico;
+        } else if (cantidadMaxima === 2) {
+            // Caso de dos símbolos iguales en cualquier posición
+            this.saldoGanado += this.apuestaActual * this.premioBasico;
+            console.log("¡Hay Dos iguales! Has ganado un premio.");
         } else {
             console.log("Perdiste.");
             this.saldoPerdido += this.apuestaActual; // Pierdes lo que apostaste
         }
 
         // Actualizar saldo y mostrar resultados finales
-        this.saldo += this.saldoGanado;
-        this.saldo -= this.saldoPerdido;
+        this.saldo += this.saldoGanado - this.saldoPerdido;
+        this.saldo = Math.max(this.saldo, 0); // Asegura que el saldo no sea negativo
+
 
         // Reiniciar apuestas y ganancias
         this.apuestaActual = 0;
@@ -136,8 +152,9 @@ export class SlotsSTD extends Juego implements Apuesta {
     }
 }
 
-    const juego2 = new SlotsSTD();
-    juego2.cargarSaldo(500000);
-    juego2.realizarApuesta(1000);
-    juego2.actualizarSaldo();  // Mostrar el saldo después de jugar
-    juego2.jugar();  // Llama al método jugar() del juego Slots Premium
+//const juego2 = new SlotsSTD();
+//juego2.cargarSaldo(500);
+//juego2.iniciarJuego()
+//juego2.realizarApuesta(50); // Realizar una apuesta de 50
+//juego2.actualizarSaldo();  // Mostrar el saldo después de jugar
+//juego2.jugar();  // Llama al método jugar() del juego Slots Premium

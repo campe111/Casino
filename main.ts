@@ -1,7 +1,7 @@
-import * as readlineSync from 'readline-sync'; 
-import { SlotsSTD } from './SlotsSTD'; 
-import { SlotsPrem } from './SlotsPrem'; 
-import { BlackJack } from './BlackJack'; 
+import * as readlineSync from 'readline-sync';
+import { SlotsSTD } from './SlotsSTD';
+import { SlotsPrem } from './SlotsPrem';
+import { BlackJack } from './BlackJack';
 import { Bingo } from './Bingo';
 import { Casino } from './Casino';
 import { Usuario } from './Usuario';
@@ -135,7 +135,7 @@ const accederUsuario = async () => {
     } else {
         console.log('Usuario no encontrado.');
     }
-   //casino.accederUsuario(nombreUsuario);
+    //casino.accederUsuario(nombreUsuario);
 };
 
 
@@ -268,17 +268,27 @@ const iniciarJuego = (juego: string) => {
     console.log(`Iniciando el juego: ${juego}`);
 
     switch (juego) {
-        case 'Slots  STD':
-            const slotsSTD = new SlotsSTD();  // Instancia del juego SlotsSTD
+        case 'Slots STD':
+            const slotsSTD = new SlotsSTD();
+            const saldoSlosStD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots? ');
+            slotsSTD.cargarSaldo(saldoSlosStD);
             const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
-            
+            slotsSTD.realizarApuesta(apuestaSlotsSTD);
+            slotsSTD.jugar();
+            slotsSTD.actualizarSaldo();
             break;
+
         case 'Slots Premium':
-            const slotsPrem = new SlotsPrem();  // Instancia del juego Slots Premium
-            const apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
-         
+            const slotsPremium = new SlotsPrem();
+            const saldoPremium = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots premiun? ');
+            slotsPremium.cargarSaldo(saldoPremium);
+            const apuestaSlotsPremiun = readlineSync.questionInt('¿Cuánto deseas apostar en Slots premiun? ');
+            slotsPremium.realizarApuesta(apuestaSlotsPremiun);
+            slotsPremium.jugar();
+            slotsPremium.actualizarSaldo();
+
             break;
-        case 'Blackjack': 
+        case 'Blackjack':
             // Crear una instancia del juego BlackJack
             const blackJack = new BlackJack();  // Instancia del juego BlackJack
             const saldoBlackJack = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Blackjack? ');
@@ -295,7 +305,7 @@ const iniciarJuego = (juego: string) => {
             const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
             bingo.realizarApuesta(apuestaBingo);
             bingo.jugar();
-             // Llama al método jugar() del juego Bingo
+            // Llama al método jugar() del juego Bingo
             bingo.bingoFinal();
             break;
         default:
@@ -345,7 +355,7 @@ const menuJuegos = async () => {
             break;
     }
 
-    
+
     // Volver al submenú si no se seleccionó "volver"
     if (opcion !== 'volver') {
         await menuJuegos();
@@ -369,7 +379,7 @@ const mostrarTituloCasino = () => {
     `);
 };
 
-    
+
 // Menú principal
 const menuOpciones = async () => {
     mostrarTituloCasino();
@@ -388,7 +398,7 @@ const menuOpciones = async () => {
                 { name: 'Salir', value: 'salir' }
             ]
         }
-        
+
     ]);
 
     switch (opcion) {
@@ -420,7 +430,7 @@ const menuOpciones = async () => {
         await menuOpciones();
     }
 
-    
+
 };
 
 menuOpciones();
