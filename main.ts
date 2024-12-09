@@ -385,8 +385,6 @@ const iniciarJuego = async (juego: string) => {
     switch (juego) {
         case 'Slots STD':
             const slotsSTD = new SlotsSTD(billetera);
-            const saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
-            slotsSTD.cargarSaldo(saldoSlotsSTD);
             let jugarSlotsSTD = true;
             while (jugarSlotsSTD) {
                 console.log("La apuesta mínima es de 20 pesos y la máxima es de 500 pesos");
@@ -399,14 +397,12 @@ const iniciarJuego = async (juego: string) => {
                     console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
                     jugarSlotsSTD = false;
                 } else {
-                    jugarSlotsSTD = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                    jugarSlotsSTD = readlineSync.keyInYNStrict("¿Quieres volver a jugar y realizar otra apuesta? ");
                 }
             }
             break;
         case 'Slots Premium':
             const slotsPrem = new SlotsPrem(billetera);
-            const saldoSlotsPremium = readlineSync.questionInt("¿Cuánto saldo deseas cargar en Slots Premium? ");
-            slotsPrem.cargarSaldo(saldoSlotsPremium);
             let jugarSlotsPremium = true;
             while (jugarSlotsPremium) {
                 console.log("La apuesta minima es de 20 pesos y la maxima es de 500 pesos");
@@ -425,8 +421,6 @@ const iniciarJuego = async (juego: string) => {
             break;
         case 'Blackjack':
             const blackJack = new BlackJack(billetera);
-            const saldoBlackJack = readlineSync.questionInt("¿Cuanto saldo deseas cargar en Blackjack? ");
-            blackJack.cargarSaldo(saldoBlackJack);
             let jugarBlackJack = true;
             while (jugarBlackJack) {
                 const apuestaBlackJack = readlineSync.questionInt("¿Cuanto deseas apostar en Blackjack? ");
@@ -444,8 +438,6 @@ const iniciarJuego = async (juego: string) => {
             break;
         case 'Bingo':
             const bingo = new Bingo(billetera);
-            const saldoBingo = readlineSync.questionInt("¿Cuánto saldo deseas cargar en Bingo? ");
-            bingo.cargarSaldo(saldoBingo);
             let jugarBingo = true;
             while (jugarBingo) {
                 const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
