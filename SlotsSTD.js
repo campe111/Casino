@@ -20,7 +20,7 @@ var Juego_1 = require("./Juego");
 var SlotsSTD = /** @class */ (function (_super) {
     __extends(SlotsSTD, _super);
     function SlotsSTD(billetera) {
-        var _this = _super.call(this, "Slots STD", "Juego de Casino", 50, billetera) || this; // Ajusté el premio a 100 para simplificación
+        var _this = _super.call(this, "Slots STD", "Juego de Casino", 10, billetera) || this; // Ajusté el premio a 100 para simplificación
         _this.resultado = '';
         _this.juegoEnCurso = false;
         _this.rodillos = ["🍒", "🍑", "🍐", "🍏"]; // Posibles símbolos del juego
@@ -29,8 +29,8 @@ var SlotsSTD = /** @class */ (function (_super) {
         _this.apuestaActual = 0; // Al principio no hay apuesta
         _this.saldoGanado = 0; // No se ha ganado nada todavía
         _this.saldoPerdido = 0; // No se ha perdido nada todavía
-        _this.apuestaMinimaPermitida = 20; // Apuesta mínima de 20
-        _this.apuestaMaximaPermitida = 500; // Apuesta máxima de 500
+        _this.apuestaMinimaPermitida = 20; // Apuesta mínima de 500
+        _this.apuestaMaximaPermitida = 500; // Apuesta máxima de 2000
         return _this;
     }
     // Método para cargar saldo

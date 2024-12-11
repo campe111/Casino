@@ -377,13 +377,13 @@ var submenuUsuario = function (usuario) { return __awaiter(void 0, void 0, void 
     });
 }); };
 var modificarDatosUsuario = function (usuario) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, campo, nuevoValor;
+    var _a, opcion, nuevoValor;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0: return [4 /*yield*/, inquirer_1.default.prompt([
                     {
                         type: 'list',
-                        name: 'campo',
+                        name: 'opcion',
                         message: '¿Qué desea modificar?',
                         choices: ['Edad', 'Saldo']
                     },
@@ -393,7 +393,7 @@ var modificarDatosUsuario = function (usuario) { return __awaiter(void 0, void 0
                         message: 'Ingrese el nuevo valor:',
                         validate: function (input) {
                             // Validación de la edad
-                            if (campo === 'Edad') {
+                            if (opcion === 'Edad') {
                                 var edad = parseInt(input, 10);
                                 if (isNaN(edad)) {
                                     return 'Debe ingresar un número válido para la edad.';
@@ -404,7 +404,7 @@ var modificarDatosUsuario = function (usuario) { return __awaiter(void 0, void 0
                                 return true;
                             }
                             // Validación de saldo
-                            if (campo === 'Saldo') {
+                            if (opcion === 'Saldo') {
                                 var saldo = parseFloat(input);
                                 if (isNaN(saldo)) {
                                     return 'Debe ingresar un número válido para el saldo.';
@@ -418,10 +418,10 @@ var modificarDatosUsuario = function (usuario) { return __awaiter(void 0, void 0
                         },
                         filter: function (input) {
                             // Convertir el valor de edad o saldo según corresponda
-                            if (campo === 'Edad') {
+                            if (opcion === 'Edad') {
                                 return parseInt(input, 10); // Convertir a número entero
                             }
-                            else if (campo === 'Saldo') {
+                            else if (opcion === 'Saldo') {
                                 return parseFloat(input); // Convertir a número decimal
                             }
                             return input;
@@ -429,18 +429,25 @@ var modificarDatosUsuario = function (usuario) { return __awaiter(void 0, void 0
                     }
                 ])];
             case 1:
-                _a = _b.sent(), campo = _a.campo, nuevoValor = _a.nuevoValor;
+                _a = _b.sent(), opcion = _a.opcion, nuevoValor = _a.nuevoValor;
                 // Validación adicional al modificar la edad, asegurándonos de que el valor ingresado es mayor a 18
-                if (campo === 'Edad') {
-                    if (nuevoValor < 18) {
-                        console.log('La edad debe ser un número mayor o igual a 18 años. Modificación no permitida.');
+                if (opcion === 'Edad') {
+                    if ((isNaN)(nuevoValor)) {
+                        console.log('Debe ingresar un número válido para la edad.');
+                    }
+                    else if (nuevoValor < 18) {
+                        console.log('La edad debe ser un número mayor o igual a 18 años.');
                     }
                     else {
                         usuario.setEdad(nuevoValor); // Modificamos la edad solo si es válida
                         console.log("Edad modificada a ".concat(nuevoValor));
                     }
                 }
-                else if (campo === 'Saldo') {
+                else if ((opcion === 'Saldo') && (isNaN)(nuevoValor)) {
+                    console.log('Debe ingresar un número válido para el saldo.');
+                }
+                else if ((opcion === 'Saldo') && (nuevoValor <= 0)) {
+                    console.log('El saldo debe ser un número mayor que 0.');
                     usuario.setSaldo(nuevoValor); // Modificamos el saldo
                     console.log("Saldo modificado a ".concat(nuevoValor));
                 }
@@ -485,74 +492,94 @@ var iniciarJuego = function (juego) { return __awaiter(void 0, void 0, void 0, f
                 slotsSTD = new SlotsSTD_1.SlotsSTD(billetera);
                 jugarSlotsSTD = true;
                 while (jugarSlotsSTD) {
-                    console.log("La apuesta mínima es de 20 pesos y la máxima es de 500 pesos");
+                    console.log("\nLa apuesta mínima es de 20 pesos y la máxima es de 500 pesos\n");
                     apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ');
                     slotsSTD.realizarApuesta(apuestaSlotsSTD);
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     slotsSTD.jugar();
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     slotsSTD.actualizarSaldo();
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     if (slotsSTD.billetera.obtenerSaldo() <= 0) {
-                        console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                        console.log("\nSaldo insuficiente para seguir jugando. Necesitas cargar más saldo.\n");
                         jugarSlotsSTD = false;
                     }
                     else {
-                        jugarSlotsSTD = readlineSync.keyInYNStrict("¿Quieres volver a jugar y realizar otra apuesta? ");
+                        jugarSlotsSTD = readlineSync.keyInYNStrict("\n¿Quieres volver a jugar y realizar otra apuesta? ");
                     }
+                    console.log("\n"); // Salto de línea al final de cada ciclo
                 }
                 break;
             case 'Slots Premium':
                 slotsPrem = new SlotsPrem_1.SlotsPrem(billetera);
                 jugarSlotsPremium = true;
                 while (jugarSlotsPremium) {
-                    console.log("La apuesta minima es de 20 pesos y la maxima es de 500 pesos");
-                    apuestaSlotsPremium = readlineSync.questionInt("¿Cuanto deseas apostar en Slots Premium? ");
+                    console.log("\nLa apuesta minima es de 20 pesos y la maxima es de 500 pesos\n");
+                    apuestaSlotsPremium = readlineSync.questionInt("¿Cuánto deseas apostar en Slots Premium? ");
                     slotsPrem.realizarApuesta(apuestaSlotsPremium);
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     slotsPrem.jugar();
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     slotsPrem.actualizarSaldo();
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     if (slotsPrem.billetera.obtenerSaldo() <= 0) {
-                        console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                        console.log("\nSaldo insuficiente para seguir jugando. Necesitas cargar más saldo.\n");
                         jugarSlotsPremium = false;
                     }
                     else {
-                        jugarSlotsPremium = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                        jugarSlotsPremium = readlineSync.keyInYNStrict('\n¿Quieres volver a jugar y realizar otra apuesta? ');
                     }
+                    console.log("\n"); // Salto de línea al final de cada ciclo
                 }
                 break;
             case 'Blackjack':
                 blackJack = new BlackJack_1.BlackJack(billetera);
                 jugarBlackJack = true;
                 while (jugarBlackJack) {
-                    apuestaBlackJack = readlineSync.questionInt("¿Cuanto deseas apostar en Blackjack? ");
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
+                    apuestaBlackJack = readlineSync.questionInt("\n¿Cuánto deseas apostar en Blackjack? ");
                     blackJack.realizarApuesta(apuestaBlackJack);
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     blackJack.repartirCartas(2);
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     blackJack.plantarse();
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     if (blackJack.billetera.obtenerSaldo() <= 0) {
-                        console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                        console.log("\nSaldo insuficiente para seguir jugando. Necesitas cargar más saldo.\n");
                         jugarBlackJack = false;
                     }
                     else {
-                        jugarBlackJack = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                        jugarBlackJack = readlineSync.keyInYNStrict('\n¿Quieres volver a jugar y realizar otra apuesta? ');
                     }
+                    console.log("\n"); // Salto de línea al final de cada ciclo
                 }
                 break;
             case 'Bingo':
                 bingo = new Bingo_1.Bingo(billetera);
                 jugarBingo = true;
                 while (jugarBingo) {
-                    apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
+                    apuestaBingo = readlineSync.questionInt('\n¿Cuánto deseas apostar en Bingo? ');
                     bingo.realizarApuesta(apuestaBingo);
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     bingo.jugar();
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     bingo.bingoFinal();
+                    console.log("\n-------------------------------"); // Guion para separar las secciones
                     if (bingo.billetera.obtenerSaldo() <= 0) {
-                        console.log("Saldo insuficiente para seguir jugando. Necesitas cargar más saldo.");
+                        console.log("\nSaldo insuficiente para seguir jugando. Necesitas cargar más saldo.\n");
                         jugarBingo = false;
                     }
                     else {
-                        jugarBingo = readlineSync.keyInYNStrict('¿Quieres volver a jugar y realizar otra apuesta? ');
+                        jugarBingo = readlineSync.keyInYNStrict('\n¿Quieres volver a jugar y realizar otra apuesta? ');
                     }
+                    console.log("\n"); // Salto de línea al final de cada ciclo
                 }
                 break;
             default:
-                console.log('Opción no válida.');
+                console.log("\n-------------------------------"); // Guion para separar las secciones
+                console.log('\nOpción no válida.\n');
+                console.log("\n-------------------------------"); // Guion para separar las secciones
                 break;
         }
         return [2 /*return*/];
@@ -608,51 +635,3 @@ var menuJuegos = function () { return __awaiter(void 0, void 0, void 0, function
         }
     });
 }); };
-// const iniciarJuego = (juego: string) => {
-//     console.log(`Iniciando el juego: ${juego}`);
-//     switch (juego) {
-//         case 'Slots STD':
-//             const slotsSTD = new SlotsSTD();
-//             const saldoSlotsSTD = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots STD? ');
-//             slotsSTD.cargarSaldo(saldoSlotsSTD);
-//             console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos")
-//             const apuestaSlotsSTD = readlineSync.questionInt('¿Cuánto deseas apostar en Slots STD? ')
-//             slotsSTD.realizarApuesta(apuestaSlotsSTD);
-//             slotsSTD.jugar();
-//             slotsSTD.actualizarSaldo();
-//             break;
-//         case 'Slots Premium':
-//             const slotsPrem = new SlotsPrem();  // Instancia del juego Slots Premium
-//             const saldoSlotsPremium = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Slots Premium? ');
-//             slotsPrem.cargarSaldo(saldoSlotsPremium);
-//             console.log("La apuesta minima es de 20 pesos  y la maxima es de 500 pesos");
-//             const apuestaSlotsPremium = readlineSync.questionInt('¿Cuánto deseas apostar en Slots Premium? ');
-//             slotsPrem.realizarApuesta(apuestaSlotsPremium);
-//             slotsPrem.jugar();
-//             slotsPrem.actualizarSaldo();
-//             break;
-//         case 'Blackjack': 
-//             // Crear una instancia del juego BlackJack
-//             const blackJack = new BlackJack();  // Instancia del juego BlackJack
-//             const saldoBlackJack = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Blackjack? ');
-//             blackJack.cargarSaldo(saldoBlackJack);
-//             const apuestaBlackJack = readlineSync.questionInt('¿Cuánto deseas apostar en Blackjack? ');
-//             blackJack.realizarApuesta(apuestaBlackJack);
-//             blackJack.repartirCartas(3);
-//             blackJack.plantarse();
-//             break;
-//         case 'Bingo':
-//             const bingo = new Bingo();  // Instancia del juego Bingo
-//             const saldoBingo = readlineSync.questionInt('¿Cuánto saldo deseas cargar en Bingo? ');
-//             bingo.cargarSaldo(saldoBingo);
-//             const apuestaBingo = readlineSync.questionInt('¿Cuánto deseas apostar en Bingo? ');
-//             bingo.realizarApuesta(apuestaBingo);
-//             bingo.jugar();
-//              // Llama al método jugar() del juego Bingo
-//             bingo.bingoFinal();
-//             break;
-//         default:
-//             console.log('Opción no válida.');
-//             break;
-//     }
-// };
