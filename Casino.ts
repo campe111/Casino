@@ -6,7 +6,7 @@ class Casino  {
 
     constructor() {
         this.juegosDisponibles = ['Bingo', 'Tragamonedas', 'Blackjack'];
-        this.usuarios = [];        
+        this.usuarios = [ ];        
     }
 // Metodo para registrar un usuario en el casino
     public registrarUsuario(nombreUsuario: string, dni: number, edad: number, saldo: number): void {
