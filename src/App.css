@@ -61,6 +61,7 @@ body {
   background: linear-gradient(135deg, rgba(108, 92, 231, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
@@ -94,6 +95,7 @@ body {
   border-radius: var(--border-radius-lg);
   padding: 2rem;
   box-shadow: var(--shadow-xl);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   animation: fadeInUp 0.5s ease-out;
 }
@@ -533,6 +535,172 @@ body {
   color: var(--primary-color);
 }
 
+/* Cartas de BlackJack mejoradas */
+.cartas-blackjack {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  perspective: 1000px;
+}
+
+.carta-blackjack {
+  width: 120px;
+  height: 168px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+  position: relative;
+  border: 2px solid #e0e0e0;
+  animation: cardFlip 0.6s ease-out;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carta-blackjack:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 12px 36px rgba(0, 0, 0, 0.15);
+}
+
+.carta-blackjack.carta-roja {
+  border-color: #d63031;
+}
+
+.carta-blackjack.carta-negra {
+  border-color: #2d3436;
+}
+
+.carta-superior,
+.carta-inferior {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.carta-inferior {
+  transform: rotate(180deg);
+  align-items: flex-end;
+}
+
+.carta-valor {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.carta-palo {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.carta-centro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.carta-palo-grande {
+  font-size: 3.5rem;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.carta-roja .carta-valor,
+.carta-roja .carta-palo,
+.carta-roja .carta-palo-grande {
+  color: #d63031;
+}
+
+.carta-negra .carta-valor,
+.carta-negra .carta-palo,
+.carta-negra .carta-palo-grande {
+  color: #2d3436;
+}
+
+.suma-cartas-container {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.suma-cartas {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: var(--border-radius);
+  display: inline-block;
+}
+
+.suma-cartas.suma-perdida {
+  background: linear-gradient(135deg, #ffe5e5, #ffcccc);
+  color: #d63031;
+  animation: shake 0.5s ease-out;
+}
+
+.suma-cartas.suma-blackjack {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #00b894;
+  animation: pulse 0.5s ease-out;
+}
+
+.blackjack-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 1.25rem;
+  animation: bounce 1s infinite;
+}
+
+.perdida-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.instruccion-juego {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* Crupier */
+.crupier-oculto {
+  opacity: 0.8;
+}
+
+.carta-oculta {
+  background: linear-gradient(135deg, #636e72, #2d3436) !important;
+  color: white !important;
+  border-color: #2d3436 !important;
+}
+
+.carta-oculta .carta-valor,
+.carta-oculta .carta-palo,
+.carta-oculta .carta-palo-grande {
+  color: white !important;
+  opacity: 0.9;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
 /* Bingo */
 .bingo-carton {
   margin-top: 2rem;
@@ -573,6 +741,151 @@ body {
   border-color: var(--success-color);
   transform: scale(1.1);
   box-shadow: var(--shadow-md);
+}
+
+.carton-numero.linea-completa {
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  border-color: #fdcb6e;
+  border-width: 3px;
+  animation: pulse 1s infinite;
+  font-weight: 800;
+}
+
+.carton-numero.carton-completo {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  border-color: var(--success-color);
+  border-width: 3px;
+  animation: bounce 0.5s infinite;
+  font-weight: 800;
+  box-shadow: 0 0 20px rgba(0, 184, 148, 0.5);
+}
+
+/* Bola saliendo */
+.bola-saliendo {
+  margin: 1rem 0;
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.bola-display {
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  color: white;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.bola-display h3 {
+  color: white;
+  margin-bottom: 0.5rem;
+  font-size: clamp(0.875rem, 2.5vw, 1.25rem);
+}
+
+.bola-numero {
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 900;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: bounce 0.8s infinite;
+  margin: clamp(0.25rem, 1.5vw, 0.5rem) 0;
+  line-height: 1;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.bola-marcada {
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  font-weight: 600;
+  margin-top: 0.5rem;
+  animation: pulse 1s infinite;
+  padding: 0 0.5rem;
+}
+
+/* Bolas salidas */
+.bolas-salidas {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: var(--border-radius);
+}
+
+.bolas-salidas h4 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.bolas-salidas-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.bola-salida {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: white;
+  border-radius: var(--border-radius);
+  border: 2px solid #e0e0e0;
+  font-weight: 600;
+  font-size: 1rem;
+  min-width: 50px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.bola-salida.marcada {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  border-color: var(--success-color);
+  color: var(--success-color);
+  font-weight: 800;
+  transform: scale(1.1);
+}
+
+/* Juego info */
+.juego-info {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.tiradas-restantes {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: white;
+  border-radius: var(--border-radius);
+  display: inline-block;
+}
+
+.juego-en-progreso {
+  text-align: center;
+  padding: 1rem;
+}
+
+.simulando {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Instrucciones */
@@ -677,6 +990,24 @@ body {
     min-width: 60px;
   }
 
+  .carta-blackjack {
+    width: 100px;
+    height: 140px;
+    padding: 10px;
+  }
+
+  .carta-valor {
+    font-size: 1.25rem;
+  }
+
+  .carta-palo {
+    font-size: 1rem;
+  }
+
+  .carta-palo-grande {
+    font-size: 2.5rem;
+  }
+
   .carton-grid {
     grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
     gap: 0.5rem;
@@ -688,6 +1019,51 @@ body {
 
   .info-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Bola saliendo responsive */
+  .bola-saliendo {
+    margin: 0.75rem 0;
+  }
+
+  .bola-display {
+    padding: 0.75rem;
+  }
+
+  .bola-display h3 {
+    font-size: 0.875rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .bola-numero {
+    font-size: 2.5rem;
+    margin: 0.4rem 0;
+  }
+
+  .bola-marcada {
+    font-size: 0.75rem;
+    margin-top: 0.4rem;
+  }
+
+  .bolas-salidas {
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+
+  .bolas-salidas h4 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .bola-salida {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+    min-width: 40px;
+  }
+
+  .tiradas-restantes {
+    font-size: 1rem;
+    padding: 0.5rem;
   }
 }
 
@@ -714,6 +1090,38 @@ body {
 
   .saldo-display h3 {
     font-size: 1.5rem;
+  }
+
+  /* Bola saliendo muy pequeña */
+  .bola-display {
+    padding: 0.6rem;
+  }
+
+  .bola-display h3 {
+    font-size: 0.75rem;
+  }
+
+  .bola-numero {
+    font-size: 2rem;
+    margin: 0.3rem 0;
+  }
+
+  .bola-marcada {
+    font-size: 0.7rem;
+  }
+
+  .bolas-salidas {
+    padding: 0.75rem;
+  }
+
+  .bolas-salidas-grid {
+    gap: 0.4rem;
+  }
+
+  .bola-salida {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    min-width: 35px;
   }
 }
 

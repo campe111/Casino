@@ -7,16 +7,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependencies
 node_modules
-
-# Build outputs
 dist
 dist-ssr
 *.local
-
-# Compiled JavaScript in root (should not exist with noEmit: true)
-/*.js
+.env
+.env.local
+.env.production
 
 # Editor directories and files
 .vscode/*

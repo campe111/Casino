@@ -9,7 +9,7 @@ function MenuPrincipal({ cambiarVista, usuarioActual }: MenuPrincipalProps) {
   return (
     <div className="menu-principal">
       <div className="menu-card">
-        <h2>Bienvenido al Casino KING OF COING</h2>
+        <h2>Bienvenido al Casino KING OF COINS</h2>
         {usuarioActual && (
           <div className="usuario-info-badge">
             Usuario: {usuarioActual.getNombreUsuario()} | 

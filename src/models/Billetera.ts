@@ -21,6 +21,10 @@ class Billetera {
     obtenerSaldo(): number {
         return this.saldo;
     }
+
+    establecerSaldo(monto: number): void {
+        this.saldo = monto;
+    }
 }
 
 export { Billetera };

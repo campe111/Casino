@@ -11,8 +11,6 @@ export class SlotsSTD extends Juego implements Apuesta {
     private premioBasico: number;
     private apuestaMinimaPermitida: number;
     private apuestaMaximaPermitida: number;
-    private resultado: string = '';
-    private juegoEnCurso: boolean = false;
 
     constructor(billetera: Billetera) {
         super("Slots STD", "Juego de Casino", 10, billetera);
@@ -34,8 +32,13 @@ export class SlotsSTD extends Juego implements Apuesta {
         } else if (monto > this.billetera.obtenerSaldo()) {
             throw new Error("Saldo insuficiente para realizar la apuesta.");
         } else {
-            // Solo establecer la apuesta, no restar el saldo todavía
-            // El saldo se restará al momento de jugar
+            // Si ya hay una apuesta, devolver el saldo de la apuesta anterior
+            if (this.apuestaActual > 0) {
+                this.billetera.agregarSaldo(this.apuestaActual);
+            }
+            
+            // Descontar la nueva apuesta
+            this.billetera.restarSaldo(monto);
             this.apuestaActual = monto;
         }
     }
@@ -68,16 +71,6 @@ export class SlotsSTD extends Juego implements Apuesta {
             throw new Error("Debes realizar una apuesta antes de jugar.");
         }
 
-        // Verificar que haya suficiente saldo para la apuesta actual
-        if (this.apuestaActual > this.billetera.obtenerSaldo()) {
-            // Si no hay suficiente saldo, resetear la apuesta
-            this.apuestaActual = 0;
-            throw new Error("Saldo insuficiente para la apuesta actual. Realiza una nueva apuesta.");
-        }
-
-        // Restar la apuesta del saldo antes de jugar
-        this.billetera.restarSaldo(this.apuestaActual);
-
         const resultado = this.generarResultado(4);
         const simboloMasFrecuente = resultado.reduce((maxSimbolo, simbolo) => {
             return resultado.filter(s => s === simbolo).length > resultado.filter(s => s === maxSimbolo).length ? simbolo : maxSimbolo;
@@ -108,8 +101,8 @@ export class SlotsSTD extends Juego implements Apuesta {
             this.billetera.agregarSaldo(ganancia);
         }
 
-        // NO resetear apuestaActual - permite jugar múltiples veces con la misma apuesta
-        // Solo resetear contadores de estadísticas
+        // NO resetear apuestaActual - mantener la apuesta para la siguiente ronda
+        // this.apuestaActual = 0;
         this.saldoGanado = 0;
         this.saldoPerdido = 0;
 

@@ -1,18 +1,14 @@
-import { Billetera } from './Billetera';
-
 export class Usuario {
     private nombreUsuario: string;
     private dni: number;
-    private edad: number;
+    private edad: number = 0;
     private saldo: number;
-    private billetera: Billetera;
 
     constructor(nombreUsuario: string, dni: number, edad: number, saldo: number) {
         this.nombreUsuario = nombreUsuario;
         this.dni = dni;
         this.setEdad(edad);
         this.saldo = saldo;
-        this.billetera = new Billetera(saldo);
     }
 
     public getNombreUsuario(): string {
@@ -43,13 +39,10 @@ export class Usuario {
 
     public setSaldo(saldo: number): void {
         this.saldo = saldo;
-        // Sincronizar la billetera con el nuevo saldo
-        this.billetera = new Billetera(saldo);
     }
 
     public agregarSaldo(cantidad: number): void {
         this.saldo += cantidad;
-        this.billetera.agregarSaldo(cantidad);
     }
 
     public restarSaldo(cantidad: number): void {
@@ -57,30 +50,7 @@ export class Usuario {
             throw new Error('Saldo insuficiente.');
         } else {
             this.saldo -= cantidad;
-            this.billetera.restarSaldo(cantidad);
         }
-    }
-
-    public getBilletera(): Billetera {
-        // Sincronizar el saldo de la billetera con el saldo actual del usuario
-        const saldoBilletera = this.billetera.obtenerSaldo();
-        if (saldoBilletera !== this.saldo) {
-            // Si hay diferencia, ajustar la billetera
-            const diferencia = this.saldo - saldoBilletera;
-            if (diferencia > 0) {
-                this.billetera.agregarSaldo(diferencia);
-            } else {
-                // Solo restar si hay suficiente saldo en la billetera
-                const montoAbsoluto = Math.abs(diferencia);
-                if (montoAbsoluto <= saldoBilletera) {
-                    this.billetera.restarSaldo(montoAbsoluto);
-                } else {
-                    // Resetear la billetera al saldo del usuario
-                    this.billetera = new Billetera(this.saldo);
-                }
-            }
-        }
-        return this.billetera;
     }
 
     public validarEdad(): boolean {
