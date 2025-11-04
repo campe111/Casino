@@ -20,14 +20,17 @@ var Juego_1 = require("./Juego");
 var SlotsSTD = /** @class */ (function (_super) {
     __extends(SlotsSTD, _super);
     function SlotsSTD(billetera) {
-        var _this = _super.call(this, "Slots STD", "Juego de Casino", 100, billetera) || this; // Ajusté el premio a 100 para simplificación
+        var _this = _super.call(this, "Slots STD", "Juego de Casino", 10, billetera) || this; // Ajusté el premio a 100 para simplificación
+        _this.resultado = '';
+        _this.juegoEnCurso = false;
         _this.rodillos = ["🍒", "🍑", "🍐", "🍏"]; // Posibles símbolos del juego
+        _this.premioSlost = 10;
+        _this.premioBasico = 2;
         _this.apuestaActual = 0; // Al principio no hay apuesta
         _this.saldoGanado = 0; // No se ha ganado nada todavía
         _this.saldoPerdido = 0; // No se ha perdido nada todavía
-        _this.saldo = 0; // El saldo inicial es 0
-        _this.apuestaMinimaPermitida = 20; // Apuesta mínima de 20
-        _this.apuestaMaximaPermitida = 500; // Apuesta máxima de 1000
+        _this.apuestaMinimaPermitida = 20; // Apuesta mínima de 500
+        _this.apuestaMaximaPermitida = 500; // Apuesta máxima de 2000
         return _this;
     }
     // Método para cargar saldo
@@ -36,15 +39,15 @@ var SlotsSTD = /** @class */ (function (_super) {
             console.log("El monto a cargar debe ser positivo.");
             return;
         }
-        this.saldo += monto;
-        console.log("Saldo cargado: $".concat(monto, ". Saldo total: $").concat(this.saldo));
+        this.billetera.agregarSaldo(monto);
+        console.log("Saldo cargado: $".concat(monto, ". Saldo total: $").concat(this.billetera.obtenerSaldo()));
     };
     // Método para realizar una apuesta
     SlotsSTD.prototype.realizarApuesta = function (monto) {
-        if (monto < 20) {
+        if (monto < this.apuestaMinimaPermitida) {
             console.log("La apuesta es menor que la mínima permitida.");
         }
-        else if (monto > 500) {
+        else if (monto > this.apuestaMaximaPermitida) {
             console.log("La apuesta supera el máximo permitido.");
         }
         else if (monto > this.billetera.obtenerSaldo()) {
@@ -52,6 +55,7 @@ var SlotsSTD = /** @class */ (function (_super) {
         }
         else {
             this.billetera.restarSaldo(monto);
+            this.apuestaActual = monto;
             console.log("Apuesta realizada: ".concat(monto));
         }
     };
@@ -75,7 +79,6 @@ var SlotsSTD = /** @class */ (function (_super) {
     SlotsSTD.prototype.generarResultado = function (cantidadDeRodillos) {
         var _this = this;
         if (cantidadDeRodillos === void 0) { cantidadDeRodillos = 4; }
-        // Generar resultado con cantidad dinámica de rodillos
         return Array.from({ length: cantidadDeRodillos }, function () { return _this.rodillos[Math.floor(Math.random() * _this.rodillos.length)]; });
     };
     // Método para jugar
@@ -84,37 +87,32 @@ var SlotsSTD = /** @class */ (function (_super) {
             console.log("Debes realizar una apuesta antes de jugar.");
             return;
         }
-        // Generamos el resultado
         var resultado = this.generarResultado(4);
         console.log("Resultado:", resultado.join(""));
-        // Lógica de resultados con más combinaciones ganadoras
-        if (resultado.every(function (simbolo) { return simbolo === resultado[0]; })) {
-            // Jackpot: todos los símbolos son iguales
-            console.log("¡Jackpot! Los símbolos son iguales.");
-            this.saldoGanado += this.apuestaActual * 15; // Gran premio con multiplicador x15
+        var simboloMasFrecuente = resultado.reduce(function (maxSimbolo, simbolo) {
+            return resultado.filter(function (s) { return s === simbolo; }).length > resultado.filter(function (s) { return s === maxSimbolo; }).length ? simbolo : maxSimbolo;
+        }, resultado[0]);
+        var cantidadMaxima = resultado.filter(function (s) { return s === simboloMasFrecuente; }).length;
+        if (cantidadMaxima === 4) {
+            console.log("¡Cuatro iguales! Has ganado un premio especial.");
+            this.saldoGanado += this.apuestaActual * this.premioSlost;
         }
-        else if (resultado.slice(0, 3).every(function (simbolo) { return simbolo === resultado[0]; })) {
-            // Tres símbolos iguales
+        else if (cantidadMaxima === 3) {
             console.log("¡Tres iguales! Has ganado un premio.");
-            this.saldoGanado += this.apuestaActual * 5; // Premio por tres iguales
+            this.saldoGanado += this.apuestaActual * this.premioBasico;
         }
-        else if (new Set(resultado).size === 2) {
-            // Dos pares iguales
-            console.log("¡Ganaste! Dos pares iguales.");
-            this.saldoGanado += this.apuestaActual * 3; // Premio por dos pares iguales
-        }
-        else if (resultado[0] === resultado[1]) {
-            // Caso de dos símbolos iguales
-            console.log("¡Ganaste! Dos símbolos iguales.");
-            this.saldoGanado += this.apuestaActual * 2; // Premio pequeño por dos iguales
+        else if (cantidadMaxima === 2) {
+            console.log("¡Hay Dos iguales! Has ganado un premio.");
+            this.saldoGanado += this.apuestaActual * this.premioBasico;
         }
         else {
             console.log("Perdiste.");
-            this.saldoPerdido += this.apuestaActual; // Pierdes lo que apostaste
+            this.saldoPerdido - this.apuestaActual; // Pierdes lo que apostaste
         }
         // Actualizar saldo y mostrar resultados finales
-        this.saldo + this.saldoGanado;
-        this.saldo - this.saldoPerdido;
+        this.billetera.agregarSaldo(this.saldoGanado);
+        this.billetera.restarSaldo(this.saldoPerdido);
+        console.log("Saldo actualizado: $".concat(this.billetera.obtenerSaldo()));
         // Reiniciar apuestas y ganancias
         this.apuestaActual = 0;
         this.saldoGanado = 0;
@@ -122,7 +120,16 @@ var SlotsSTD = /** @class */ (function (_super) {
     };
     // Método para mostrar el saldo actual
     SlotsSTD.prototype.actualizarSaldo = function () {
-        console.log("Saldo actual del jugador: $".concat(this.saldo));
+        if (this.resultado.includes('Ganaste')) {
+            var ganancias = this.apuestaActual * this.premio;
+            this.billetera.agregarSaldo(ganancias); // Sumar ganancias al saldo actual
+            console.log("Saldo actualizado: $".concat(this.billetera.obtenerSaldo()));
+        }
+        else if (this.resultado.includes('Perdiste')) {
+            console.log("Saldo actualizado: $".concat(this.billetera.obtenerSaldo()));
+        }
+        this.juegoEnCurso = false; // Finalizar el juego
+        this.apuestaActual = 0; // Reiniciar la apuesta actual
     };
     // Método para mostrar las instrucciones del juego
     SlotsSTD.prototype.instruccionJuego = function () {
