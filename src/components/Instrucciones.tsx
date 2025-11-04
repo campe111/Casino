@@ -48,12 +48,14 @@ function Instrucciones({ cambiarVista }: InstruccionesProps) {
             </p>
             <ul>
               <li><strong>Cartas:</strong> Las cartas numeradas del 2 al 10 valen su valor nominal, las cartas con figuras (J, Q, K) valen 10 puntos y el As puede valer 1 o 11 puntos.</li>
-              <li><strong>Juego:</strong></li>
-              <ul>
-                <li>El crupier reparte dos cartas a ti y a sí mismo.</li>
-                <li><strong>Pedir carta:</strong> Si deseas aumentar el valor de tu mano, puedes pedir cartas adicionales.</li>
-                <li><strong>Plantarse:</strong> Si estás satisfecho con tu mano, puedes plantarte.</li>
-              </ul>
+              <li>
+                <strong>Juego:</strong>
+                <ul>
+                  <li>El crupier reparte dos cartas a ti y a sí mismo.</li>
+                  <li><strong>Pedir carta:</strong> Si deseas aumentar el valor de tu mano, puedes pedir cartas adicionales.</li>
+                  <li><strong>Plantarse:</strong> Si estás satisfecho con tu mano, puedes plantarte.</li>
+                </ul>
+              </li>
               <li><strong>Ganador:</strong> Ganas si tu mano tiene un valor total más cercano a 21 que la del crupier, sin pasarte de 21.</li>
             </ul>
             <p className="consejo">💡 <strong>Consejo:</strong> ¡Ten cuidado con el As! Puede ser un salvavidas o una maldición si no lo usas bien.</p>

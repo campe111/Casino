@@ -7,10 +7,15 @@ class Bingo extends Juego implements Apuesta {
     private resultado: string = '';
     private bolasLlamadas: number[] = [];
     private bolasMarcadas: number[] = [];
+    private bolasSalidas: number[] = []; // Números que ya salieron
+    private indiceBolaActual: number = 0;
+    private maxTiradas: number = 30; // Máximo de tiradas
     public apuestaActual: number = 0;
     private ganancias: number = 0;
     private perdidas: number = 0;
     protected juegoEnCurso: boolean = false;
+    private tieneLinea: boolean = false; // Si tiene línea completa
+    private cartonCompleto: boolean = false; // Si tiene cartón completo
 
     constructor(billetera: Billetera) {
         super("Bingo", "Juego de Casino", 50, billetera);
@@ -41,57 +46,129 @@ class Bingo extends Juego implements Apuesta {
         return bolas;
     }
 
-    public jugar(): { carton: number[]; bolasMarcadas: number[]; bingo: boolean; mensaje: string; ganancia: number } {
+    iniciarJuego(): void {
         if (this.apuestaActual <= 0) {
             throw new Error("Carga saldo y realiza una apuesta antes de jugar.");
         }
-
-        // Verificar que haya suficiente saldo para la apuesta actual
-        if (this.apuestaActual > this.billetera.obtenerSaldo()) {
-            // Si no hay suficiente saldo, resetear la apuesta
-            this.apuestaActual = 0;
-            throw new Error("Saldo insuficiente para la apuesta actual. Realiza una nueva apuesta.");
-        }
-
-        // Restar la apuesta del saldo antes de jugar
-        this.billetera.restarSaldo(this.apuestaActual);
-
-        // Resetear para una nueva partida
+        this.juegoEnCurso = true;
+        this.bolasSalidas = [];
         this.bolasMarcadas = [];
-        this.carton = this.generarCarton();
-        this.bolasLlamadas = this.generarBolas();
+        this.indiceBolaActual = 0;
+        this.tieneLinea = false;
+        this.cartonCompleto = false;
+        this.resultado = '';
+    }
 
-        let bingo = false;
-        let mensaje = "";
-        let ganancia = 0;
-
-        for (let i = 0; i < Math.min(15, this.bolasLlamadas.length); i++) {
-            const bola = this.bolasLlamadas[i];
-            if (this.carton.includes(bola)) {
-                this.bolasMarcadas.push(bola);
-            }
-            if (this.bolasMarcadas.length === this.carton.length) {
-                bingo = true;
-                break;
-            }
+    sacarBola(): { numero: number; marcado: boolean; juegoTerminado: boolean; tieneLinea: boolean; cartonCompleto: boolean } {
+        if (!this.juegoEnCurso) {
+            throw new Error("El juego no está en curso. Inicia el juego primero.");
         }
 
-        if (bingo) {
-            mensaje = "¡Bingo! Has marcado todos los números.";
-            this.resultado = 'Ganaste';
-            ganancia = this.apuestaActual + this.premio;
+        if (this.indiceBolaActual >= this.maxTiradas || this.indiceBolaActual >= this.bolasLlamadas.length) {
+            // Se alcanzó el máximo de tiradas sin completar el cartón
+            this.juegoEnCurso = false;
+            return {
+                numero: 0,
+                marcado: false,
+                juegoTerminado: true,
+                tieneLinea: this.tieneLinea,
+                cartonCompleto: false
+            };
+        }
+
+        const bola = this.bolasLlamadas[this.indiceBolaActual];
+        this.bolasSalidas.push(bola);
+        const marcado = this.carton.includes(bola);
+        
+        if (marcado) {
+            this.bolasMarcadas.push(bola);
+            // Verificar si hay línea (5 números seguidos marcados)
+            this.tieneLinea = this.verificarLinea();
+            // Verificar si el cartón está completo
+            this.cartonCompleto = this.bolasMarcadas.length === this.carton.length;
+        }
+
+        this.indiceBolaActual++;
+
+        // Si el cartón está completo, terminar el juego
+        if (this.cartonCompleto) {
+            this.juegoEnCurso = false;
+            return {
+                numero: bola,
+                marcado: marcado,
+                juegoTerminado: true,
+                tieneLinea: this.tieneLinea,
+                cartonCompleto: true
+            };
+        }
+
+        return {
+            numero: bola,
+            marcado: marcado,
+            juegoTerminado: false,
+            tieneLinea: this.tieneLinea,
+            cartonCompleto: false
+        };
+    }
+
+    private verificarLinea(): boolean {
+        // Verificar si hay 5 números consecutivos marcados en el cartón ordenado
+        const cartonOrdenado = [...this.carton].sort((a, b) => a - b);
+        const marcados = this.bolasMarcadas.sort((a, b) => a - b);
+        
+        // Buscar 5 números consecutivos en el cartón que estén todos marcados
+        for (let i = 0; i <= cartonOrdenado.length - 5; i++) {
+            const secuencia = cartonOrdenado.slice(i, i + 5);
+            if (secuencia.every(num => marcados.includes(num))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    finalizarJuego(): { carton: number[]; bolasMarcadas: number[]; bingo: boolean; mensaje: string; ganancia: number; tieneLinea: boolean } {
+        if (this.cartonCompleto) {
+            const ganancia = this.apuestaActual + this.premio;
             this.ganancias = this.premio;
             this.billetera.agregarSaldo(ganancia);
+            this.resultado = 'Ganaste';
+            return {
+                carton: this.carton,
+                bolasMarcadas: this.bolasMarcadas,
+                bingo: true,
+                mensaje: "¡Bingo! Has marcado todos los números del cartón.",
+                ganancia: ganancia,
+                tieneLinea: this.tieneLinea
+            };
         } else {
-            mensaje = "El juego ha terminado, pero no hay Bingo.";
-            this.resultado = 'Perdiste';
+            this.perdidas += this.apuestaActual;
             this.ganancias = 0;
+            this.resultado = 'Perdiste';
+            return {
+                carton: this.carton,
+                bolasMarcadas: this.bolasMarcadas,
+                bingo: false,
+                mensaje: `Se alcanzó el máximo de ${this.maxTiradas} tiradas sin completar el cartón.`,
+                ganancia: 0,
+                tieneLinea: this.tieneLinea
+            };
         }
+    }
 
-        this.juegoEnCurso = false;
-        // NO resetear apuestaActual - permite jugar múltiples veces con la misma apuesta
+    getBolasSalidas(): number[] {
+        return this.bolasSalidas;
+    }
 
-        return { carton: this.carton, bolasMarcadas: this.bolasMarcadas, bingo, mensaje, ganancia };
+    getTiradasRestantes(): number {
+        return Math.max(0, this.maxTiradas - this.indiceBolaActual);
+    }
+
+    getTieneLinea(): boolean {
+        return this.tieneLinea;
+    }
+
+    getCartonCompleto(): boolean {
+        return this.cartonCompleto;
     }
 
     realizarApuesta(monto: number): void {
@@ -100,15 +177,23 @@ class Bingo extends Juego implements Apuesta {
         } else if (monto > this.billetera.obtenerSaldo()) {
             throw new Error("Saldo insuficiente para realizar la apuesta.");
         } else {
-            // Solo establecer la apuesta, no restar el saldo todavía
-            // El saldo se restará al momento de jugar
-            // Si se cambia la apuesta, resetear el juego
+            // Si ya hay una apuesta, devolver el saldo de la apuesta anterior
+            if (this.apuestaActual > 0) {
+                this.billetera.agregarSaldo(this.apuestaActual);
+            }
+            
+            // Descontar la nueva apuesta
+            this.billetera.restarSaldo(monto);
             this.apuestaActual = monto;
             this.resultado = '';
             this.bolasMarcadas = [];
+            this.bolasSalidas = [];
+            this.indiceBolaActual = 0;
+            this.tieneLinea = false;
+            this.cartonCompleto = false;
             this.carton = this.generarCarton();
             this.bolasLlamadas = this.generarBolas();
-            this.juegoEnCurso = false;
+            this.juegoEnCurso = false; // Resetear estado del juego para nueva ronda
         }
     }
 
@@ -130,6 +215,10 @@ class Bingo extends Juego implements Apuesta {
 
     getBolasMarcadas(): number[] {
         return this.bolasMarcadas;
+    }
+
+    getResultado(): string {
+        return this.resultado;
     }
 }
 

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Billetera } from '../models/Billetera';
 import { Usuario } from '../models/Usuario';
 import { Vista } from '../App';
 import { SlotsSTD } from '../models/SlotsSTD';
@@ -11,35 +12,27 @@ import JuegoBlackJack from './juegos/JuegoBlackJack';
 import JuegoBingo from './juegos/JuegoBingo';
 
 interface MenuJuegosProps {
-  usuario: Usuario | null;
+  billetera: Billetera;
+  usuario?: Usuario | null;
   cambiarVista: (vista: Vista) => void;
+  actualizarUsuario?: (usuario: Usuario | null) => void;
 }
 
 type JuegoSeleccionado = 'menu' | 'slotsSTD' | 'slotsPrem' | 'blackjack' | 'bingo';
 
-function MenuJuegos({ usuario, cambiarVista }: MenuJuegosProps) {
+function MenuJuegos({ billetera, usuario, cambiarVista, actualizarUsuario }: MenuJuegosProps) {
   const [juegoSeleccionado, setJuegoSeleccionado] = useState<JuegoSeleccionado>('menu');
   const [juego, setJuego] = useState<any>(null);
 
-  if (!usuario) {
-    return (
-      <div className="menu-principal">
-        <div className="menu-card">
-          <h2>Debes iniciar sesión para jugar</h2>
-          <button 
-            className="btn btn-secondary"
-            onClick={() => cambiarVista('menu')}
-          >
-            Volver al Menú Principal
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // Sincronizar billetera con el saldo del usuario cuando se inicia el componente
+  useEffect(() => {
+    if (usuario) {
+      const saldoUsuario = usuario.getSaldo();
+      billetera.establecerSaldo(saldoUsuario);
+    }
+  }, []);
 
   const iniciarJuego = (tipo: JuegoSeleccionado) => {
-    // Obtener la billetera sincronizada del usuario
-    const billetera = usuario.getBilletera();
     let nuevoJuego;
     
     switch (tipo) {
@@ -64,6 +57,12 @@ function MenuJuegos({ usuario, cambiarVista }: MenuJuegosProps) {
   };
 
   const volverAlMenu = () => {
+    // Sincronizar saldo del usuario con la billetera antes de volver
+    if (usuario && actualizarUsuario) {
+      const saldoBilletera = billetera.obtenerSaldo();
+      usuario.setSaldo(saldoBilletera);
+      actualizarUsuario(usuario);
+    }
     setJuegoSeleccionado('menu');
     setJuego(null);
   };
@@ -115,28 +114,20 @@ function MenuJuegos({ usuario, cambiarVista }: MenuJuegosProps) {
     );
   }
 
-  // Función para sincronizar el saldo del usuario con la billetera del juego
-  const sincronizarSaldo = () => {
-    if (usuario && juego) {
-      const saldoBilletera = juego.billetera.obtenerSaldo();
-      usuario.setSaldo(saldoBilletera);
-    }
-  };
-
   if (juegoSeleccionado === 'slotsSTD' && juego) {
-    return <JuegoSlotsSTD juego={juego} volver={volverAlMenu} sincronizarSaldo={sincronizarSaldo} />;
+    return <JuegoSlotsSTD juego={juego} volver={volverAlMenu} usuario={usuario} actualizarUsuario={actualizarUsuario} />;
   }
 
   if (juegoSeleccionado === 'slotsPrem' && juego) {
-    return <JuegoSlotsPrem juego={juego} volver={volverAlMenu} sincronizarSaldo={sincronizarSaldo} />;
+    return <JuegoSlotsPrem juego={juego} volver={volverAlMenu} usuario={usuario} actualizarUsuario={actualizarUsuario} />;
   }
 
   if (juegoSeleccionado === 'blackjack' && juego) {
-    return <JuegoBlackJack juego={juego} volver={volverAlMenu} sincronizarSaldo={sincronizarSaldo} />;
+    return <JuegoBlackJack juego={juego} volver={volverAlMenu} usuario={usuario} actualizarUsuario={actualizarUsuario} />;
   }
 
   if (juegoSeleccionado === 'bingo' && juego) {
-    return <JuegoBingo juego={juego} volver={volverAlMenu} sincronizarSaldo={sincronizarSaldo} />;
+    return <JuegoBingo juego={juego} volver={volverAlMenu} usuario={usuario} actualizarUsuario={actualizarUsuario} />;
   }
 
   return null;

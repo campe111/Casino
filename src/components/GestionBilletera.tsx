@@ -1,35 +1,17 @@
 import { useState } from 'react';
+import { Billetera } from '../models/Billetera';
 import { Usuario } from '../models/Usuario';
 import { Vista } from '../App';
 
 interface GestionBilleteraProps {
   usuario: Usuario | null;
+  billetera: Billetera;
   cambiarVista: (vista: Vista) => void;
 }
 
-function GestionBilletera({ usuario, cambiarVista }: GestionBilleteraProps) {
+function GestionBilletera({ usuario, billetera, cambiarVista }: GestionBilleteraProps) {
   const [monto, setMonto] = useState('');
   const [mensaje, setMensaje] = useState('');
-
-  if (!usuario) {
-    return (
-      <div className="form-container">
-        <div className="form-card">
-          <h2>Gestión de Billetera</h2>
-          <div className="alert alert-info">
-            <p>Debes iniciar sesión para gestionar tu billetera.</p>
-          </div>
-          <button 
-            type="button" 
-            className="btn btn-secondary"
-            onClick={() => cambiarVista('menu')}
-          >
-            Volver
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   const handleAgregarSaldo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,12 +22,19 @@ function GestionBilletera({ usuario, cambiarVista }: GestionBilleteraProps) {
       return;
     }
 
-    usuario.agregarSaldo(cantidad);
-    setMensaje(`Saldo agregado: $${cantidad}. Saldo actual: $${usuario.getSaldo()}`);
+    if (usuario) {
+      usuario.agregarSaldo(cantidad);
+      // Sincronizar billetera con el saldo del usuario
+      billetera.establecerSaldo(usuario.getSaldo());
+      setMensaje(`Saldo agregado: $${cantidad}. Saldo actual: $${usuario.getSaldo()}`);
+    } else {
+      billetera.agregarSaldo(cantidad);
+      setMensaje(`Saldo agregado: $${cantidad}. Saldo actual: $${billetera.obtenerSaldo()}`);
+    }
     setMonto('');
   };
 
-  const saldoActual = usuario.getSaldo();
+  const saldoActual = usuario ? usuario.getSaldo() : billetera.obtenerSaldo();
 
   return (
     <div className="form-container">

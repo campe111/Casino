@@ -1,0 +1,26 @@
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/App.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/GestionBilletera.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/MenuJuegos.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/juegos/JuegoBingo.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/juegos/JuegoBlackJack.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/juegos/JuegoSlotsPrem.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/juegos/JuegoSlotsSTD.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/models/Bingo.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/models/BlackJack.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/models/SlotsPrem.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/models/SlotsSTD.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/models/Usuario.ts', LF will be replaced by CRLF the next time Git touches it
+.gitignore
+src/App.tsx
+src/components/GestionBilletera.tsx
+src/components/MenuJuegos.tsx
+src/components/juegos/JuegoBingo.tsx
+src/components/juegos/JuegoBlackJack.tsx
+src/components/juegos/JuegoSlotsPrem.tsx
+src/components/juegos/JuegoSlotsSTD.tsx
+src/models/Bingo.ts
+src/models/BlackJack.ts
+src/models/SlotsPrem.ts
+src/models/SlotsSTD.ts
+src/models/Usuario.ts
